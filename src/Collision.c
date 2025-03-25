@@ -16,6 +16,7 @@ void CheckBulletsToEnemyCollision(List* bullet_list, Enemy* enemy)
 		if (IsCollide(&current_bullet_node->data.bullet.collider, &enemy->collider))
 		{
 			DebugLog("hit\n");
+			
 			DestroyBullet(&current_bullet_node->data.bullet);
 		}
 
@@ -37,6 +38,7 @@ void CheckBulletsToEnemiesCollision(List* bullet_list, List* enemy_list)
 			if (IsCollide(&current_bullet_node->data.bullet.collider, &current_enemy_node->data.enemy.collider))
 			{
 				DebugLog("hit\n");
+				PlayBulletHitEffect(&current_bullet_node->data.bullet);
 				DestroyBullet(&current_bullet_node->data.bullet);
 				EnemyTakeDamage(&current_enemy_node->data.enemy, current_bullet_node->data.bullet.damage);
 			}

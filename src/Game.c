@@ -1,5 +1,7 @@
 #include "Game.h"
 
+#include <locale.h>
+
 #include "ConsoleRenderer.h"
 #include "Input.h"
 #include "MenuScene.h"
@@ -17,6 +19,8 @@ static void (*ReleaseScene)();
 
 void InitializeGame()
 {
+    setlocale(LC_ALL, "");
+
     ScreenInit();
 
     next_scene = MENU;

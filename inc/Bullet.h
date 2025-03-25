@@ -8,6 +8,7 @@
 
 typedef struct Player Player;
 typedef struct Enemy Enemy;
+typedef struct UnionList List;
 
 typedef struct Bullet
 {
@@ -38,3 +39,7 @@ void DestroyBullet(Bullet* bullet);
 BOOL IsBulletDestroyed(Bullet* bullet);
 
 void DeleteBullet(Bullet* bullet);
+
+void SetEffectBulletHitList(List* list);
+
+void PlayBulletHitEffect(Bullet* bullet);

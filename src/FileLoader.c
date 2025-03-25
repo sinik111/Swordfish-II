@@ -6,25 +6,26 @@
 #include <wchar.h>
 
 #include "DebugUtility.h"
+#include "Types.h"
 
-StringData* LoadData(const char* file_name)
+StringData* LoadSingleLineData(const wchar_t* file_name)
 {
-	char path[MAX_PATH] = { 0 };
+	wchar_t path[MAX_PATH] = { 0 };
 
-	GetModuleFileNameA(NULL, path, MAX_PATH);
+	GetModuleFileNameW(NULL, path, MAX_PATH);
 
-	int path_length = (int)strlen(path);
-	int no_file = 1;
+	size_t path_length = wcslen(path);
+	BOOL no_file = TRUE;
 
-	for (int i = path_length - 1; i >= 0; --i)
+	for (int i = (int)path_length - 1; i >= 0; --i)
 	{
 		if (path[i] == '\\')
 		{
 			path[i] = '\0';
 
-			if (!strcmp("bin", &(path[i + 1])))
+			if (!wcscmp(L"bin", &(path[i + 1])))
 			{
-				no_file = 0;
+				no_file = FALSE;
 
 				break;
 			}
@@ -37,17 +38,17 @@ StringData* LoadData(const char* file_name)
 		return NULL;
 	}
 
-	strcat_s(path, MAX_PATH, "\\data\\");
-	strcat_s(path, MAX_PATH, file_name);
+	wcscat_s(path, MAX_PATH, L"\\data\\");
+	wcscat_s(path, MAX_PATH, file_name);
 
-	FILE* fp = fopen(path, "r");
+	FILE* fp = _wfopen(path, L"r, ccs=UTF-8");
 	if (fp == NULL)
 	{
 		DebugLog("파일을 열 수 없습니다. LoadData()\n");
 		return NULL;
 	}
 
-	StringData* sd = (StringData*)malloc(sizeof(StringData*));
+	StringData* sd = (StringData*)malloc(sizeof(StringData));
 	if (sd == NULL)
 	{
 		fclose(fp);
@@ -55,12 +56,14 @@ StringData* LoadData(const char* file_name)
 		return NULL;
 	}
 
-	fscanf_s(fp, "%d", &sd->m);
-	fscanf_s(fp, "%d", &sd->n);
-	fscanf_s(fp, "%d", &sd->count);
-	fgetwc(fp);
+	wchar_t header[50];
 
-	sd->data = (wchar_t*)malloc(sizeof(wchar_t) * sd->m * sd->n * sd->count);
+	fgetws(header, 50, fp);
+
+	int result = swscanf(header, L"%d %d %d %d %d %d",
+		&sd->m, &sd->n, &sd->count, &sd->additional1, &sd->additional2, &sd->additional3);
+
+	sd->data = (wchar_t*)malloc(sizeof(wchar_t) * (sd->m * sd->n * sd->count + 1));
 	if (sd->data == NULL)
 	{
 		fclose(fp);
@@ -70,10 +73,85 @@ StringData* LoadData(const char* file_name)
 
 	wmemset(sd->data, 0, sd->m * sd->n * sd->count);
 
+	fgetws(sd->data, sd->m * sd->n * sd->count + 1, fp);
+
+	fclose(fp);
+
+	return sd;
+}
+
+StringData* LoadMultiLineData(const wchar_t* file_name)
+{
+	wchar_t path[MAX_PATH] = { 0 };
+
+	GetModuleFileNameW(NULL, path, MAX_PATH);
+
+	size_t path_length = wcslen(path);
+	BOOL no_file = TRUE;
+
+	for (int i = (int)path_length - 1; i >= 0; --i)
+	{
+		if (path[i] == '\\')
+		{
+			path[i] = '\0';
+
+			if (!wcscmp(L"bin", &(path[i + 1])))
+			{
+				no_file = FALSE;
+
+				break;
+			}
+		}
+	}
+
+	if (no_file)
+	{
+		DebugLog("파일을 열 수 없습니다. LoadData()\n");
+		return NULL;
+	}
+
+	wcscat_s(path, MAX_PATH, L"\\data\\");
+	wcscat_s(path, MAX_PATH, file_name);
+
+	FILE* fp = _wfopen(path, L"r, ccs=UTF-8");
+	if (fp == NULL)
+	{
+		DebugLog("파일을 열 수 없습니다. LoadData()\n");
+		return NULL;
+	}
+
+	StringData* sd = (StringData*)malloc(sizeof(StringData));
+	if (sd == NULL)
+	{
+		fclose(fp);
+		DebugLog("sd 할당 실패. LoadData()\n");
+		return NULL;
+	}
+
+	wchar_t header[50];
+
+	fgetws(header, 50, fp);
+
+	int result = swscanf(header, L"%d %d %d %d %d %d",
+		&sd->m, &sd->n, &sd->count, &sd->additional1, &sd->additional2, &sd->additional3);
+
+	sd->data = (wchar_t*)malloc(sizeof(wchar_t) * (sd->m * sd->n * sd->count + 1));
+	if (sd->data == NULL)
+	{
+		fclose(fp);
+		printf("sd->data 할당 실패. LoadData()\n");
+		return NULL;
+	}
+
+	wmemset(sd->data, 0, sd->m * sd->n * sd->count);
+
+	wchar_t line[100];
+
 	for (int i = 0; i < sd->count; ++i)
 	{
-		int position = sd->m * sd->n * i;
-		fgetws(sd->data + position, sd->m * sd->n + 2, fp);
+		fgetws(line, sd->m, fp);
+		line[wcscspn(line, L"\n")] = L' ';
+		wcscat_s(sd->data, sd->m * sd->n * sd->count, line);
 	}
 
 	fclose(fp);

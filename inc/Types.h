@@ -23,6 +23,7 @@ typedef enum DataType
 	ENEMY,
 	LIST,
 	EFFECT_UNIT,
+	EFFECT_BULLET_HIT
 } DataType;
 
 //typedef enum Layer

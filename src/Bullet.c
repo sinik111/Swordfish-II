@@ -11,6 +11,10 @@
 #include "Types.h"
 #include "DebugUtility.h"
 #include "Enemy.h"
+#include "UnionList.h"
+#include "EffectBulletHit.h"
+
+static List* effect_bullet_hit_list = NULL;
 
 void CreateBullet(Bullet* bullet, Player* player)
 {
@@ -70,4 +74,19 @@ BOOL IsBulletDestroyed(Bullet* bullet)
 void DeleteBullet(Bullet* bullet)
 {
 
+}
+
+void SetEffectBulletHitList(List* list)
+{
+	effect_bullet_hit_list = list;
+}
+
+void PlayBulletHitEffect(Bullet* bullet)
+{
+	EffectBulletHit effect;
+
+	CreateEffectBulletHit(&effect);
+	effect.position = bullet->position;
+
+	Insert(effect_bullet_hit_list, &effect, sizeof(EffectBulletHit));
 }

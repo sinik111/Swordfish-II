@@ -19,14 +19,17 @@ static List* bullet_list = NULL;
 static List* enemy_list = NULL;
 static List* enemy_bullet_list = NULL;
 static UIplayerHP* hp_ui = NULL;
+static List* effect_bullet_hit_list = NULL;
 
 static void UpdateBulletList();
 static void UpdateEnemyList();
 static void UpdateEnemyBulletList();
+static void UpdateEffectBulletHitList();
 
 static void RenderBulletList();
 static void RenderEnemyList();
 static void RenderEnemyBulletList();
+static void RenderEffectBulletHitList();
 
 void InitializePlayScene()
 {
@@ -51,17 +54,27 @@ void InitializePlayScene()
 	SetUIplayerHPplayer(player);
 
 	CreateEffectBulletHitData();
+
+	effect_bullet_hit_list = CreateList(EFFECT_BULLET_HIT);
+	SetEffectBulletHitList(effect_bullet_hit_list);
 }
 
 void UpdatePlayScene()
 {
+	// collision
 	CheckBulletsToEnemiesCollision(bullet_list, enemy_list);
 	CheckplayerToEnemyBulletsCollision(player, enemy_bullet_list);
 
+	// object
 	UpdatePlayer(player);
 	UpdateBulletList();
 	UpdateEnemyBulletList();
 	UpdateEnemyList();
+
+	// effect
+	UpdateEffectBulletHitList();
+
+	// ui
 	UpdateUIplayerHP(hp_ui);
 }
 
@@ -69,10 +82,16 @@ void RenderPlayScene()
 {
 	ScreenDrawString(ScreenWidth() / 2 - 2, ScreenHeight() / 2 - 1, L"play", FG_RED);
 
+	// object
 	RenderPlayer(player);
 	RenderBulletList();
 	RenderEnemyBulletList();
 	RenderEnemyList();
+
+	// effect
+	RenderEffectBulletHitList();
+
+	// ui
 	RenderUIplayerHP(hp_ui);
 
 	ScreenDrawString(ScreenWidth() / 2 - 8, ScreenHeight() / 2 + 5, L"press A to fire", FG_WHITE);
@@ -144,6 +163,11 @@ void ReleasePlayScene()
 
 		free(hp_ui);
 	}
+
+	DeleteList(effect_bullet_hit_list);
+	effect_bullet_hit_list = NULL;
+
+	DeleteEffectBulletHit();
 }
 
 static void UpdateBulletList()
@@ -206,6 +230,25 @@ static void UpdateEnemyList()
 	}
 }
 
+static void UpdateEffectBulletHitList()
+{
+	Node* previous_node = NULL;
+	Node* current_node = effect_bullet_hit_list->head;
+	while (current_node != NULL)
+	{
+		UpdateEffectBulletHit(&current_node->data.effect_bullet_hit);
+		if (IsEffectBulletHitDestroyed(&current_node->data.effect_bullet_hit))
+		{
+			current_node = RemoveNode(effect_bullet_hit_list, previous_node, current_node);
+		}
+		else
+		{
+			previous_node = current_node;
+			current_node = current_node->next;
+		}
+	}
+}
+
 static void RenderBulletList()
 {
 	Node* current_node = bullet_list->head;
@@ -234,6 +277,17 @@ static void RenderEnemyList()
 	while (current_node != NULL)
 	{
 		RenderEnemy(&current_node->data.enemy);
+
+		current_node = current_node->next;
+	}
+}
+
+static void RenderEffectBulletHitList()
+{
+	Node* current_node = effect_bullet_hit_list->head;
+	while (current_node != NULL)
+	{
+		RenderEffectBulletHit(&current_node->data.effect_bullet_hit);
 
 		current_node = current_node->next;
 	}

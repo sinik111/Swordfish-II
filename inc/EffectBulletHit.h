@@ -3,6 +3,7 @@
 #include <wchar.h>
 
 #include "Vector2.h"
+#include "Types.h"
 
 typedef struct UnionList List;
 
@@ -19,6 +20,17 @@ typedef struct EffectBulletHit
 	long long id;
 	Vector2 position;
 	float timer;
+	BOOL is_destroyed;
 } EffectBulletHit;
 
-EffectBulletHitData* CreateEffectBulletHitData();
+void CreateEffectBulletHitData();
+
+void CreateEffectBulletHit(EffectBulletHit* effect);
+
+void UpdateEffectBulletHit(EffectBulletHit* effect);
+
+void RenderEffectBulletHit(EffectBulletHit* effect);
+
+BOOL IsEffectBulletHitDestroyed(EffectBulletHit* effect);
+
+void DeleteEffectBulletHit();
