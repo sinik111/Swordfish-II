@@ -7,7 +7,8 @@
 
 typedef enum EffectType
 {
-	BULLET_HIT,
+	BULLET_HIT_EFFECT,
+	PLAYER_FLAME_EFFECT,
 } EffectType;
 
 typedef struct UnionList List;

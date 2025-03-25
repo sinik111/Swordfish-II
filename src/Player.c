@@ -13,13 +13,15 @@
 #include "DebugUtility.h"
 #include "Types.h"
 #include "Game.h"
+#include "PlayScene.h"
 
-static List* player_bullet_list = NULL;
 static float player_fire_timer = 0.0f;
+static float player_flame_timer = 0.0f;
 
 static void Translate(Player* player);
 static void Fire(Player* player);
 static void ScreenBoundCheck(Player* player);
+static void BackFlame(Player* player);
 
 Player* CreatePlayer()
 {
@@ -61,29 +63,36 @@ void UpdatePlayer(Player* player)
 		Fire(player);
 	}
 
+	BackFlame(player);
+
 	ScreenBoundCheck(player);
 }
 
 void RenderPlayer(Player* player)
 {
-	ScreenDrawString((int)player->position.x, (int)player->position.y, player->shape, FG_RED);
+	if (IsKeyDown(VK_UP))
+	{
+		RenderShape(&player->position, PLAYER_SHAPE, 0);
+	}
+	else if (IsKeyDown(VK_DOWN))
+	{
+		RenderShape(&player->position, PLAYER_SHAPE, 0);
+	}
+	else
+	{
+		RenderShape(&player->position, PLAYER_SHAPE, 1);
+	}
+	
 }
 
 void DeletePlayer(Player** player)
 {
-	player_bullet_list = NULL;
-
 	if (*player != NULL)
 	{
 		free(*player);
 
 		*player = NULL;
 	}
-}
-
-void SetBulletList(List* bullet_list)
-{
-	player_bullet_list = bullet_list;
 }
 
 void PlayerTakeDamage(Player* player, int damage)
@@ -142,8 +151,8 @@ static void Fire(Player* player)
 		player_fire_timer -= player->fire_rate;
 		Bullet bullet;
 		CreateBullet(&bullet, player);
-
-		Insert(player_bullet_list, &bullet, sizeof(Bullet));
+		
+		Insert(GetPlayerBulletList(), &bullet, sizeof(Bullet));
 
 		//DebugLog("fire\n");
 	}
@@ -151,23 +160,41 @@ static void Fire(Player* player)
 
 static void ScreenBoundCheck(Player* player)
 {
-	if (player->position.x < 0)
+	if (player->position.x < 2)
 	{
-		player->position.x = 0;
+		player->position.x = 2;
 	}
 
-	if (player->position.y < 0)
+	if (player->position.y < 2)
 	{
-		player->position.y = 0;
+		player->position.y = 2;
 	}
 
-	if (player->position.x > ScreenWidth() - 1)
+	if (player->position.x > ScreenWidth() - 3)
 	{
-		player->position.x = (float)ScreenWidth() - 1;
+		player->position.x = (float)(ScreenWidth() - 3);
 	}
 
-	if (player->position.y > ScreenHeight() - 1)
+	if (player->position.y > ScreenHeight() - 3)
 	{
-		player->position.y = (float)ScreenHeight() - 1;
+		player->position.y = (float)(ScreenHeight() - 3);
+	}
+}
+
+static void BackFlame(Player* player)
+{
+	player_flame_timer += DeltaTime();
+	if (player_flame_timer > 0.05f)
+	{
+		Effect effect;
+
+		vec2 back = { -4.0f, 0.0f };
+		vec2 position = AddVector2(&player->position, &back);
+
+		CreateEffect(&effect, &position, PLAYER_FLAME_EFFECT);
+
+		Insert(GetEffectList(), &effect, sizeof(Effect));
+
+		player_flame_timer -= 0.05f;
 	}
 }

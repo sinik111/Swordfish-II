@@ -12,12 +12,15 @@
 #include "ConsoleRenderer.h"
 
 static EffectData* bullet_hit_effect_data = NULL;
+static EffectData* player_flame_effect_data = NULL;
 
 static void CreateEffectData(const wchar_t* file_name, EffectType type);
+static void ReleaseEffectDataList(EffectData* data);
 
 void InitializeEffectData()
 {
-	CreateEffectData(L"effect_bullet_hit.txt", BULLET_HIT);
+	CreateEffectData(L"effect_bullet_hit.txt", BULLET_HIT_EFFECT);
+	CreateEffectData(L"player_flame.txt", PLAYER_FLAME_EFFECT);
 }
 
 static void CreateEffectData(const wchar_t* file_name, EffectType type)
@@ -36,8 +39,12 @@ static void CreateEffectData(const wchar_t* file_name, EffectType type)
 
 	switch (type)
 	{
-	case BULLET_HIT:
+	case BULLET_HIT_EFFECT:
 		bullet_hit_effect_data = data;
+		break;
+
+	case PLAYER_FLAME_EFFECT:
+		player_flame_effect_data = data;
 		break;
 
 	default:
@@ -49,7 +56,7 @@ static void CreateEffectData(const wchar_t* file_name, EffectType type)
 	data->id = GenerateID();
 	data->effect_frame_list = effect_frame_list;
 	data->frames = sd->count;
-	data->duration = (float)sd->additional1;
+	data->duration = (float)sd->additional1 / sd->additional3;
 
 	for (int c = 0; c < sd->count; ++c)
 	{
@@ -67,8 +74,7 @@ static void CreateEffectData(const wchar_t* file_name, EffectType type)
 				{
 					DrawUnit draw_unit;
 					Vector2 position = { (float)(j - sd->m / 2), (float)(i - sd->n / 2) };
-					CreateDrawUnit(&draw_unit, &position, &shape);
-					draw_unit.id = GenerateID();
+					CreateDrawUnit(&draw_unit, &position, &shape, sd->additional2);
 					Insert(effect_frames, &draw_unit, sizeof(DrawUnit));
 				}
 			}
@@ -93,8 +99,12 @@ void UpdateEffect(Effect* effect)
 	EffectData* effect_data = NULL;
 	switch (effect->type)
 	{
-	case BULLET_HIT:
+	case BULLET_HIT_EFFECT:
 		effect_data = bullet_hit_effect_data;
+		break;
+
+	case PLAYER_FLAME_EFFECT:
+		effect_data = player_flame_effect_data;
 		break;
 
 	default:
@@ -113,8 +123,12 @@ void RenderEffect(Effect* effect)
 	EffectData* effect_data = NULL;
 	switch (effect->type)
 	{
-	case BULLET_HIT:
+	case BULLET_HIT_EFFECT:
 		effect_data = bullet_hit_effect_data;
+		break;
+
+	case PLAYER_FLAME_EFFECT:
+		effect_data = player_flame_effect_data;
 		break;
 
 	default:
@@ -135,7 +149,12 @@ void RenderEffect(Effect* effect)
 	while (current_shape_node != NULL)
 	{
 		Vector2 position = AddVector2(&effect->position, &current_shape_node->data.draw_unit.position);
-		ScreenDrawChar((int)position.x, (int)position.y, current_shape_node->data.draw_unit.shape, FG_WHITE);
+		WORD attribute = current_shape_node->data.draw_unit.attribute;
+		if (attribute == 99)
+		{
+			attribute = rand() % 15 + 1;
+		}
+		ScreenDrawChar((int)position.x, (int)position.y, current_shape_node->data.draw_unit.shape, attribute);
 
 		current_shape_node = current_shape_node->next;
 	}
@@ -148,9 +167,17 @@ BOOL IsEffectDestroyed(Effect* effect)
 
 void ReleaseEffectData()
 {
-	if (bullet_hit_effect_data != NULL)
+	ReleaseEffectDataList(bullet_hit_effect_data);
+	bullet_hit_effect_data = NULL;
+	ReleaseEffectDataList(player_flame_effect_data);
+	player_flame_effect_data = NULL;
+}
+
+static void ReleaseEffectDataList(EffectData* data)
+{
+	if (data != NULL)
 	{
-		Node* current_node = bullet_hit_effect_data->effect_frame_list->head;
+		Node* current_node = data->effect_frame_list->head;
 		while (current_node != NULL)
 		{
 			DeleteList(current_node->data.effect_list);
@@ -158,10 +185,8 @@ void ReleaseEffectData()
 			current_node = current_node->next;
 		}
 
-		DeleteList(bullet_hit_effect_data->effect_frame_list);
+		DeleteList(data->effect_frame_list);
 
-		free(bullet_hit_effect_data);
-
-		bullet_hit_effect_data = NULL;
+		free(data);
 	}
 }

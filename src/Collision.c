@@ -52,7 +52,7 @@ void CheckBulletsToEnemiesCollision(List* bullet_list, List* enemy_list)
 	}
 }
 
-void CheckplayerToEnemyBulletsCollision(Player* player, List* enemy_bullet_list)
+void CheckPlayerToEnemyBulletsCollision(Player* player, List* enemy_bullet_list)
 {
 	Node* previous_bullet_node = NULL;
 	Node* current_bullet_node = enemy_bullet_list->head;

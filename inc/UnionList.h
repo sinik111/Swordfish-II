@@ -19,6 +19,7 @@ typedef struct UnionNode
 		Bullet bullet;
 		Enemy enemy;
 		List* effect_list;
+		List* shape_list;
 		DrawUnit draw_unit;
 		Effect effect;
 	} data;

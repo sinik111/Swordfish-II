@@ -11,6 +11,7 @@
 #include "MyTime.h"
 #include "Player.h"
 #include "DebugUtility.h"
+#include "Shape.h"
 
 static List* enemy_bullet_list = NULL;
 static Player* enemy_player = NULL;
@@ -49,7 +50,8 @@ void UpdateEnemy(Enemy* enemy)
 
 void RenderEnemy(Enemy* enemy)
 {
-	ScreenDrawString((int)enemy->position.x, (int)enemy->position.y, enemy->shape, FG_YELLOW);
+	RenderShape(&enemy->position, ENEMY_1_SHAPE, 0);
+	//ScreenDrawString((int)enemy->position.x, (int)enemy->position.y, enemy->shape, FG_YELLOW);
 }
 
 void DeleteEnemy(Enemy* enemy)

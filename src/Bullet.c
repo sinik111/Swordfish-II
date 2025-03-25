@@ -85,6 +85,6 @@ void PlayBulletHitEffect(Bullet* bullet)
 {
 	Effect effect;
 
-	CreateEffect(&effect, &bullet->position, BULLET_HIT);
+	CreateEffect(&effect, &bullet->position, BULLET_HIT_EFFECT);
 	Insert(effect_list, &effect, sizeof(Effect));
 }

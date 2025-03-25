@@ -8,4 +8,4 @@ void CheckBulletsToEnemyCollision(List* bullet_list, Enemy* enemy);
 
 void CheckBulletsToEnemiesCollision(List* bullet_list, List* enemy_list);
 
-void CheckplayerToEnemyBulletsCollision(Player* player, List* enemy_bullet_list);
+void CheckPlayerToEnemyBulletsCollision(Player* player, List* enemy_bullet_list);

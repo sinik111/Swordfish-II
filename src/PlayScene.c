@@ -33,9 +33,10 @@ static void RenderEffectList();
 
 void InitializePlayScene()
 {
+	InitializeShapeData();
+
 	player = CreatePlayer();
 	bullet_list = CreateList(BULLET);
-	SetBulletList(bullet_list);
 
 	SetEnemyplayer(player);
 
@@ -63,7 +64,7 @@ void UpdatePlayScene()
 {
 	// collision
 	CheckBulletsToEnemiesCollision(bullet_list, enemy_list);
-	CheckplayerToEnemyBulletsCollision(player, enemy_bullet_list);
+	CheckPlayerToEnemyBulletsCollision(player, enemy_bullet_list);
 
 	// object
 	UpdatePlayer(player);
@@ -96,8 +97,6 @@ void RenderPlayScene()
 
 	ScreenDrawString(ScreenWidth() / 2 - 8, ScreenHeight() / 2 + 5, L"press A to fire", FG_WHITE);
 	ScreenDrawString(ScreenWidth() / 2 - 12, ScreenHeight() / 2 + 9, L"press space to countinue", FG_PINK);
-
-
 }
 
 void ReleasePlayScene()
@@ -162,6 +161,17 @@ void ReleasePlayScene()
 	effect_list = NULL;
 
 	ReleaseEffectData();
+	ReleaseShapeData();
+}
+
+List* GetEffectList()
+{
+	return effect_list;
+}
+
+List* GetPlayerBulletList()
+{
+	return bullet_list;
 }
 
 static void UpdateBulletList()

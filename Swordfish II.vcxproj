@@ -74,7 +74,7 @@
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)$bin\(Platform)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -152,6 +152,7 @@
     <ClCompile Include="src\MenuScene.c" />
     <ClCompile Include="src\MyTime.c" />
     <ClCompile Include="src\PlayScene.c" />
+    <ClCompile Include="src\Shape.c" />
     <ClCompile Include="src\UIPlayerHP.c" />
     <ClCompile Include="src\Player.c" />
     <ClCompile Include="src\UnionList.c" />
@@ -175,6 +176,7 @@
     <ClInclude Include="inc\MyTime.h" />
     <ClInclude Include="inc\PlayScene.h" />
     <ClInclude Include="inc\Player.h" />
+    <ClInclude Include="inc\Shape.h" />
     <ClInclude Include="inc\Types.h" />
     <ClInclude Include="inc\UIPlayerHP.h" />
     <ClInclude Include="inc\UnionList.h" />
