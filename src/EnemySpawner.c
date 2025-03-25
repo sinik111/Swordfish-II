@@ -40,19 +40,25 @@ static void CreateEnemySpawnData(const wchar_t* file_name)
 
 	enemy_spawn_data_list = CreateList(ENEMY_SPAWN_DATA);
 
+	const wchar_t* cursor = sd->data;
+	int character_count = 0;
+
 	for (int i = 0; i < sd->count; ++i)
 	{
 		EnemySpawnData data;
 		data.id = GenerateID();
-		int result = swscanf(sd->data + i * sd->m,
-			L"%d %d %hd %f %f %hd %hd %d %f %f %hd %hd %d %f %f %hd %hd %d %f %f",
+		int result = swscanf(cursor,
+			L"%d %d %hd %f %f %hd %hd %d %f %f %hd %hd %d %f %f %hd %hd %d %f %f%n",
 			&data.enemy_type, &data.enemy_movement_type, &data.spawn_time, &data.spawn_position.x,
 			&data.spawn_position.y, &data.way_count, &data.way1_speed, &data.way1_speed_type,
 			&data.way1_position.x, &data.way1_position.y, &data.way1_time, &data.way2_speed,
 			&data.way2_speed_type, &data.way2_position.x, &data.way2_position.y, &data.way2_time,
-			&data.end_speed, &data.end_speed_type, &data.end_position.x, &data.end_position.y);
+			&data.end_speed, &data.end_speed_type, &data.end_position.x, &data.end_position.y,
+			&character_count);
 
 		Insert(enemy_spawn_data_list, &data, sizeof(EnemySpawnData));
+
+		cursor += character_count;
 	}
 
 	free(sd->data);

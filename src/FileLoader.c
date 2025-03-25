@@ -134,10 +134,9 @@ StringData* LoadMultiLineData(const wchar_t* file_name)
 	fgetws(header, 100, fp);
 	fgetws(header, 100, fp);
 
-	int result = swscanf(header, L"%d %d %d %d %d %d",
-		&sd->m, &sd->n, &sd->count, &sd->additional1, &sd->additional2, &sd->additional3);
+	int result = swscanf(header, L"%d", &sd->count);
 
-	sd->data = (wchar_t*)malloc(sizeof(wchar_t) * (sd->m * sd->n * sd->count + 1));
+	sd->data = (wchar_t*)malloc(sizeof(wchar_t) * 200 * sd->count);
 	if (sd->data == NULL)
 	{
 		fclose(fp);
@@ -145,15 +144,17 @@ StringData* LoadMultiLineData(const wchar_t* file_name)
 		return NULL;
 	}
 
-	wmemset(sd->data, 0, sd->m * sd->n * sd->count);
+	wmemset(sd->data, 0, 200 * sd->count);
 
-	wchar_t line[100];
+	wchar_t line[200];
 
 	for (int i = 0; i < sd->count; ++i)
 	{
-		fgetws(line, sd->m, fp);
-		line[wcscspn(line, L"\n")] = L' ';
-		wcscat_s(sd->data, sd->m * sd->n * sd->count, line);
+		wmemset(line, 0, 200);
+
+		fgetws(line, 200, fp);
+		line[wcscspn(line, L"\n")] = L'\t';
+		wcscat_s(sd->data, 200 * sd->count, line);
 	}
 
 	fclose(fp);
