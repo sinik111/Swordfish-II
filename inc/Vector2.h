@@ -33,4 +33,6 @@ Vector2 ScalarMulVector2Args(const Vector2* v_in, int count, ...);
 
 Vector2 ScalarMulVector2(const Vector2* v_in, float scalar); // v_in의 x, y에 scalar를 곱한 벡터를 반환함
 
+Vector2 ScalarMulVector2Each(const Vector2* v_in, float x, float y); // v_in의 x, y에 x, y를 곱한 벡터를 반환함
+
 Vector2 MakeDirectionVector2(const Vector2* v1_in, const Vector2* v2_in); // v1_in <-- v2_in 의 방향 벡터를 반환함

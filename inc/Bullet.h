@@ -6,7 +6,7 @@
 #include "CircleCollider.h"
 #include "Types.h"
 
-typedef struct SwordfishII SwordfishII;
+typedef struct Player Player;
 typedef struct Enemy Enemy;
 
 typedef struct Bullet
@@ -17,14 +17,15 @@ typedef struct Bullet
 		CircleCollider collider;
 	};
 	Vector2 direction;
-	float speed;
+	float x_speed;
+	float y_speed;
 	float timer;
 	int damage;
 	BOOL is_destroyed;
 	wchar_t shape[2];
 } Bullet;
 
-void CreateBullet(Bullet* bullet, SwordfishII* swordfish);
+void CreateBullet(Bullet* bullet, Player* player);
 
 void CreateEnemyBullet(Bullet* bullet, Enemy* enemy);
 

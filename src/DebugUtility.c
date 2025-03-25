@@ -38,11 +38,26 @@ void __PrintDebugLog(const char* fmt, ...)
 
     va_start(args, fmt);
 
-    vsnprintf_s(buffer, sizeof(buffer), _TRUNCATE, fmt, args);
+    vsnprintf_s(buffer, 1024, _TRUNCATE, fmt, args);
 
     va_end(args);
 
     OutputDebugStringA(buffer);
+}
+
+void __PrintDebugLogW(const wchar_t* fmt, ...)
+{
+    wchar_t buffer[1024];
+
+    va_list args;
+
+    va_start(args, fmt);
+
+    _vsnwprintf_s(buffer, 1024, _TRUNCATE, fmt, args);
+
+    va_end(args);
+
+    OutputDebugStringW(buffer);
 }
 
 #endif

@@ -5,17 +5,20 @@
 
 #include "UnionList.h"
 #include "ConsoleRenderer.h"
-#include "SwordfishII.h"
+#include "Player.h"
 #include "Types.h"
 #include "Enemy.h"
 #include "CircleCollider.h"
 #include "DebugUtility.h"
 #include "Collision.h"
+#include "UIplayerHP.h"
+#include "EffectBulletHit.h"
 
-static SwordfishII* swordfish = NULL;
+static Player* player = NULL;
 static List* bullet_list = NULL;
 static List* enemy_list = NULL;
 static List* enemy_bullet_list = NULL;
+static UIplayerHP* hp_ui = NULL;
 
 static void UpdateBulletList();
 static void UpdateEnemyList();
@@ -27,11 +30,11 @@ static void RenderEnemyBulletList();
 
 void InitializePlayScene()
 {
-	swordfish = CreateSwordfishII();
+	player = CreatePlayer();
 	bullet_list = CreateList(BULLET);
 	SetBulletList(bullet_list);
 
-	SetSwordFish(swordfish);
+	SetEnemyplayer(player);
 
 	enemy_bullet_list = CreateList(BULLET);
 	SetEnemyBulletList(enemy_bullet_list);
@@ -43,27 +46,34 @@ void InitializePlayScene()
 		CreateEnemy(&enemy);
 		Insert(enemy_list, &enemy, sizeof(Enemy));
 	}
+
+	hp_ui = CreateUIplayerHP();
+	SetUIplayerHPplayer(player);
+
+	CreateEffectBulletHitData();
 }
 
 void UpdatePlayScene()
 {
 	CheckBulletsToEnemiesCollision(bullet_list, enemy_list);
-	CheckSwordfishToEnemyBulletsCollision(swordfish, enemy_bullet_list);
+	CheckplayerToEnemyBulletsCollision(player, enemy_bullet_list);
 
-	UpdateSwordfishII(swordfish);
+	UpdatePlayer(player);
 	UpdateBulletList();
 	UpdateEnemyBulletList();
 	UpdateEnemyList();
+	UpdateUIplayerHP(hp_ui);
 }
 
 void RenderPlayScene()
 {
 	ScreenDrawString(ScreenWidth() / 2 - 2, ScreenHeight() / 2 - 1, L"play", FG_RED);
 
-	RenderSwordfishII(swordfish);
+	RenderPlayer(player);
 	RenderBulletList();
 	RenderEnemyBulletList();
 	RenderEnemyList();
+	RenderUIplayerHP(hp_ui);
 
 	ScreenDrawString(ScreenWidth() / 2 - 8, ScreenHeight() / 2 + 5, L"press A to fire", FG_WHITE);
 	ScreenDrawString(ScreenWidth() / 2 - 12, ScreenHeight() / 2 + 9, L"press space to countinue", FG_PINK);
@@ -111,7 +121,7 @@ void ReleasePlayScene()
 		SetEnemyBulletList(NULL);
 	}
 
-	DeleteSwordfishII(&swordfish);
+	DeletePlayer(&player);
 
 	if (enemy_list != NULL)
 	{
@@ -126,6 +136,13 @@ void ReleasePlayScene()
 		DeleteList(enemy_list);
 
 		enemy_list = NULL;
+	}
+
+	if (hp_ui != NULL)
+	{
+		DeleteUIplayerHP(hp_ui);
+
+		free(hp_ui);
 	}
 }
 

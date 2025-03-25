@@ -9,10 +9,11 @@
 #include "Vector2.h"
 #include "UnionList.h"
 #include "MyTime.h"
-#include "SwordfishII.h"
+#include "Player.h"
+#include "DebugUtility.h"
 
 static List* enemy_bullet_list = NULL;
-static SwordfishII* enemy_swordfish = NULL;
+static Player* enemy_player = NULL;
 static float fire_timer = 0.0f;
 
 void CreateEnemy(Enemy* enemy)
@@ -38,7 +39,7 @@ void UpdateEnemy(Enemy* enemy)
 	{
 		Bullet bullet;
 		CreateEnemyBullet(&bullet, enemy);
-		bullet.direction = MakeDirectionVector2(&enemy_swordfish->position, &bullet.position);
+		bullet.direction = MakeDirectionVector2(&enemy_player->position, &bullet.position);
 
 		Insert(enemy_bullet_list, &bullet, sizeof(Bullet));
 
@@ -61,13 +62,14 @@ void SetEnemyBulletList(List* bullet_list)
 	enemy_bullet_list = bullet_list;
 }
 
-void SetSwordFish(SwordfishII* swordfish)
+void SetEnemyplayer(Player* player)
 {
-	enemy_swordfish = swordfish;
+	enemy_player = player;
 }
 
 void EnemyTakeDamage(Enemy* enemy, int damage)
 {
+	DebugLog("Enemy %lld HP: %d\n", enemy->id, enemy->hp);
 	enemy->hp -= damage;
 }
 

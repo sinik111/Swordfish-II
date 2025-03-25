@@ -75,7 +75,7 @@
     <ClCompile Include="src\Vector2.c">
       <Filter>소스 파일\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="src\SwordfishII.c">
+    <ClCompile Include="src\Player.c">
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
     <ClCompile Include="src\Bullet.c">
@@ -89,6 +89,18 @@
     </ClCompile>
     <ClCompile Include="src\Enemy.c">
       <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UIPlayerHP.c">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EffectBulletHit.c">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EffectUnit.c">
+      <Filter>소스 파일\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FileLoader.c">
+      <Filter>소스 파일\Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -128,7 +140,7 @@
     <ClInclude Include="inc\Vector2.h">
       <Filter>헤더 파일\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="inc\SwordfishII.h">
+    <ClInclude Include="inc\Player.h">
       <Filter>헤더 파일\Object</Filter>
     </ClInclude>
     <ClInclude Include="inc\Bullet.h">
@@ -142,6 +154,18 @@
     </ClInclude>
     <ClInclude Include="inc\Enemy.h">
       <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\UIPlayerHP.h">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\EffectBulletHit.h">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\EffectUnit.h">
+      <Filter>헤더 파일\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\FileLoader.h">
+      <Filter>헤더 파일\Utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

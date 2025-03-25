@@ -5,7 +5,7 @@
 #include "Enemy.h"
 #include "DebugUtility.h"
 #include "Bullet.h"
-#include "SwordfishII.h"
+#include "Player.h"
 
 void CheckBulletsToEnemyCollision(List* bullet_list, Enemy* enemy)
 {
@@ -50,17 +50,17 @@ void CheckBulletsToEnemiesCollision(List* bullet_list, List* enemy_list)
 	}
 }
 
-void CheckSwordfishToEnemyBulletsCollision(SwordfishII* swordfish, List* enemy_bullet_list)
+void CheckplayerToEnemyBulletsCollision(Player* player, List* enemy_bullet_list)
 {
 	Node* previous_bullet_node = NULL;
 	Node* current_bullet_node = enemy_bullet_list->head;
 	while (current_bullet_node != NULL)
 	{
-		if (IsCollide(&swordfish->collider, &current_bullet_node->data.bullet.collider))
+		if (IsCollide(&player->collider, &current_bullet_node->data.bullet.collider))
 		{
 			DebugLog("hit\n");
 			DestroyBullet(&current_bullet_node->data.bullet);
-			SwordfishTakeDamage(swordfish, current_bullet_node->data.bullet.damage);
+			PlayerTakeDamage(player, current_bullet_node->data.bullet.damage);
 		}
 
 		previous_bullet_node = current_bullet_node;

@@ -8,7 +8,7 @@
 
 typedef struct UnionList List;
 
-typedef struct SwordfishII
+typedef struct Player
 {
 	long long id;
 	union {
@@ -21,18 +21,18 @@ typedef struct SwordfishII
 	int hp;
 	BOOL is_destroyed;
 	wchar_t shape[2];
-} SwordfishII;
+} Player;
 
-SwordfishII* CreateSwordfishII();
+Player* CreatePlayer();
 
-void UpdateSwordfishII(SwordfishII* swordfish);
+void UpdatePlayer(Player* player);
 
-void RenderSwordfishII(SwordfishII* swordfish);
+void RenderPlayer(Player* player);
 
-void DeleteSwordfishII(SwordfishII** swordfish);
+void DeletePlayer(Player** player);
 
 void SetBulletList(List* bullet_list);
 
-void SwordfishTakeDamage(SwordfishII* swordfish, int damage);
+void PlayerTakeDamage(Player* player, int damage);
 
-void DestroySwordfish(SwordfishII* swordfish);
+void DestroyPlayer(Player* player);

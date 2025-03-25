@@ -18,9 +18,11 @@ typedef unsigned short WORD;
 
 typedef enum DataType
 {
-	SWORDFISHII,
+	PLAYER,
 	BULLET,
 	ENEMY,
+	LIST,
+	EFFECT_UNIT,
 } DataType;
 
 //typedef enum Layer

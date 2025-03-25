@@ -70,6 +70,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)$bin\(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -130,12 +136,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Bullet.c" />
+    <ClCompile Include="src\EffectBulletHit.c" />
     <ClCompile Include="src\CircleCollider.c" />
     <ClCompile Include="src\Collision.c" />
     <ClCompile Include="src\ConsoleRenderer.c" />
     <ClCompile Include="src\DebugUtility.c" />
+    <ClCompile Include="src\EffectUnit.c" />
     <ClCompile Include="src\EndScene.c" />
     <ClCompile Include="src\Enemy.c" />
+    <ClCompile Include="src\FileLoader.c" />
     <ClCompile Include="src\Game.c" />
     <ClCompile Include="src\Global.c" />
     <ClCompile Include="src\Input.c" />
@@ -143,7 +152,8 @@
     <ClCompile Include="src\MenuScene.c" />
     <ClCompile Include="src\MyTime.c" />
     <ClCompile Include="src\PlayScene.c" />
-    <ClCompile Include="src\SwordfishII.c" />
+    <ClCompile Include="src\UIPlayerHP.c" />
+    <ClCompile Include="src\Player.c" />
     <ClCompile Include="src\UnionList.c" />
     <ClCompile Include="src\Vector2.c" />
   </ItemGroup>
@@ -153,16 +163,20 @@
     <ClInclude Include="inc\Collision.h" />
     <ClInclude Include="inc\ConsoleRenderer.h" />
     <ClInclude Include="inc\DebugUtility.h" />
+    <ClInclude Include="inc\EffectBulletHit.h" />
+    <ClInclude Include="inc\EffectUnit.h" />
     <ClInclude Include="inc\EndScene.h" />
     <ClInclude Include="inc\Enemy.h" />
+    <ClInclude Include="inc\FileLoader.h" />
     <ClInclude Include="inc\Game.h" />
     <ClInclude Include="inc\Global.h" />
     <ClInclude Include="inc\Input.h" />
     <ClInclude Include="inc\MenuScene.h" />
     <ClInclude Include="inc\MyTime.h" />
     <ClInclude Include="inc\PlayScene.h" />
-    <ClInclude Include="inc\SwordfishII.h" />
+    <ClInclude Include="inc\Player.h" />
     <ClInclude Include="inc\Types.h" />
+    <ClInclude Include="inc\UIPlayerHP.h" />
     <ClInclude Include="inc\UnionList.h" />
     <ClInclude Include="inc\Vector2.h" />
   </ItemGroup>

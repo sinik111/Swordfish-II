@@ -7,7 +7,7 @@
 #include "CircleCollider.h"
 
 typedef struct UnionList List;
-typedef struct SwordfishII SwordfishII;
+typedef struct Player Player;
 
 typedef struct Enemy
 {
@@ -31,7 +31,7 @@ void DeleteEnemy(Enemy* enemy);
 
 void SetEnemyBulletList(List* bullet_list);
 
-void SetSwordFish(SwordfishII* swordfish);
+void SetEnemyplayer(Player* player);
 
 void EnemyTakeDamage(Enemy* enemy, int damage);
 

@@ -20,6 +20,12 @@ void __CheckFPS();
 // 함수를 직접 쓰면 안됨
 void __PrintDebugLog(const char* fmt, ...);
 
+#include <wchar.h>
+
+#define DebugLogW(...) __PrintDebugLogW(__VA_ARGS__)
+// 함수를 직접 쓰면 안됨
+void __PrintDebugLogW(const wchar_t* fmt, ...);
+
 #else // !_DEBUG
 
 #define ENABLE_LEAK_CHECK() ((void)0)

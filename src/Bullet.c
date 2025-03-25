@@ -4,7 +4,7 @@
 #include <wchar.h>
 
 #include "ConsoleRenderer.h"
-#include "SwordfishII.h"
+#include "Player.h"
 #include "Global.h"
 #include "MyTime.h"
 #include "Vector2.h"
@@ -12,13 +12,14 @@
 #include "DebugUtility.h"
 #include "Enemy.h"
 
-void CreateBullet(Bullet* bullet, SwordfishII* swordfish)
+void CreateBullet(Bullet* bullet, Player* player)
 {
 	bullet->id = GenerateID();
-	bullet->position = AddVector2(&swordfish->position, &RightVector);
+	bullet->position = AddVector2(&player->position, &RightVector);
 	bullet->direction = RightVector;
 	bullet->collider = CreateCircleCollider(&bullet->position, 1.0f);
-	bullet->speed = 100.0f;
+	bullet->x_speed = 100.0f;
+	bullet->y_speed = 0.0f;
 	bullet->timer = 2.0f;
 	bullet->damage = 1;
 	bullet->is_destroyed = FALSE;
@@ -31,7 +32,8 @@ void CreateEnemyBullet(Bullet* bullet, Enemy* enemy)
 	bullet->position = AddVector2(&enemy->position, &LeftVector);
 	bullet->direction = LeftVector;
 	bullet->collider = CreateCircleCollider(&bullet->position, 1.0f);
-	bullet->speed = 20.0f;
+	bullet->x_speed = 20.0f;
+	bullet->y_speed = 10.0f;
 	bullet->timer = 10.0f;
 	bullet->damage = 1;
 	bullet->is_destroyed = FALSE;
@@ -40,7 +42,8 @@ void CreateEnemyBullet(Bullet* bullet, Enemy* enemy)
 
 void UpdateBullet(Bullet* bullet)
 {
-	vec2 transition = ScalarMulVector2Args(&bullet->direction, 2, bullet->speed, DeltaTime());
+	vec2 speed_mul = ScalarMulVector2Each(&bullet->direction, bullet->x_speed, bullet->y_speed);
+	vec2 transition = ScalarMulVector2(&speed_mul, DeltaTime());
 	bullet->position = AddVector2(&bullet->position, &transition);
 	bullet->timer -= DeltaTime(); // 자동 삭제 되도록 타이머 시간 감소.
 	if (bullet->timer <= 0.0f)
