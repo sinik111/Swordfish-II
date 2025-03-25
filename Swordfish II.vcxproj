@@ -144,6 +144,7 @@
     <ClCompile Include="src\DrawUnit.c" />
     <ClCompile Include="src\EndScene.c" />
     <ClCompile Include="src\Enemy.c" />
+    <ClCompile Include="src\EnemySpawner.c" />
     <ClCompile Include="src\FileLoader.c" />
     <ClCompile Include="src\Game.c" />
     <ClCompile Include="src\Global.c" />
@@ -168,6 +169,7 @@
     <ClInclude Include="inc\DrawUnit.h" />
     <ClInclude Include="inc\EndScene.h" />
     <ClInclude Include="inc\Enemy.h" />
+    <ClInclude Include="inc\EnemySpawner.h" />
     <ClInclude Include="inc\FileLoader.h" />
     <ClInclude Include="inc\Game.h" />
     <ClInclude Include="inc\Global.h" />
@@ -177,7 +179,7 @@
     <ClInclude Include="inc\PlayScene.h" />
     <ClInclude Include="inc\Player.h" />
     <ClInclude Include="inc\Shape.h" />
-    <ClInclude Include="inc\Types.h" />
+    <ClInclude Include="inc\TypeDefines.h" />
     <ClInclude Include="inc\UIPlayerHP.h" />
     <ClInclude Include="inc\UnionList.h" />
     <ClInclude Include="inc\Vector2.h" />

@@ -1,7 +1,7 @@
 #include "Collision.h"
 
 #include "UnionList.h"
-#include "Types.h"
+#include "TypeDefines.h"
 #include "Enemy.h"
 #include "DebugUtility.h"
 #include "Bullet.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Types.h"
+#include "TypeDefines.h"
 
 #define VK_ESCAPE         0x1B
 #define VK_SPACE          0x20

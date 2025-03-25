@@ -4,7 +4,7 @@
 
 #include "ConsoleRenderer.h"
 #include "Global.h"
-#include "Types.h"
+#include "TypeDefines.h"
 #include "Bullet.h"
 #include "Vector2.h"
 #include "UnionList.h"

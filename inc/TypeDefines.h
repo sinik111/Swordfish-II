@@ -15,20 +15,3 @@ typedef unsigned short WORD;
 #ifndef NULL
 #define NULL ((void*)0)
 #endif // NULL
-
-typedef enum DataType
-{
-	PLAYER,
-	BULLET,
-	ENEMY,
-	LIST,
-	DRAW_UNIT,
-	EFFECT
-} DataType;
-
-//typedef enum Layer
-//{
-//	BACKGROUND,
-//	GAMEOBJECT,
-//	UI
-//} Layer;

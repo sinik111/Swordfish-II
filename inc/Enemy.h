@@ -2,7 +2,7 @@
 
 #include <wchar.h>
 
-#include "Types.h"
+#include "TypeDefines.h"
 #include "Vector2.h"
 #include "CircleCollider.h"
 

@@ -3,7 +3,7 @@
 #include <wchar.h>
 
 #include "Vector2.h"
-#include "Types.h"
+#include "TypeDefines.h"
 
 typedef struct DrawUnit
 {

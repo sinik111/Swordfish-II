@@ -4,7 +4,7 @@
 
 #include "Vector2.h"
 #include "CircleCollider.h"
-#include "Types.h"
+#include "TypeDefines.h"
 
 typedef struct Player Player;
 typedef struct Enemy Enemy;

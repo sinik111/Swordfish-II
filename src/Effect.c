@@ -1,6 +1,7 @@
 #include "Effect.h"
 
 #include <stdlib.h>
+#include <wchar.h>
 
 #include "UnionList.h"
 #include "Vector2.h"
@@ -8,7 +9,7 @@
 #include "DebugUtility.h"
 #include "Global.h"
 #include "MyTime.h"
-#include "Types.h"
+#include "TypeDefines.h"
 #include "ConsoleRenderer.h"
 
 static EffectData* bullet_hit_effect_data = NULL;
@@ -148,13 +149,14 @@ void RenderEffect(Effect* effect)
 	Node* current_shape_node = current_frame_list->data.effect_list->head;
 	while (current_shape_node != NULL)
 	{
-		Vector2 position = AddVector2(&effect->position, &current_shape_node->data.draw_unit.position);
+		wchar_t shape = current_shape_node->data.draw_unit.shape;
 		WORD attribute = current_shape_node->data.draw_unit.attribute;
+		Vector2 position = AddVector2(&effect->position, &current_shape_node->data.draw_unit.position);
 		if (attribute == 99)
 		{
 			attribute = rand() % 15 + 1;
 		}
-		ScreenDrawChar((int)position.x, (int)position.y, current_shape_node->data.draw_unit.shape, attribute);
+		ScreenDrawChar((int)position.x, (int)position.y, shape, attribute);
 
 		current_shape_node = current_shape_node->next;
 	}

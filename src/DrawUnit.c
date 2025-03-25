@@ -4,7 +4,7 @@
 
 #include "Global.h"
 #include "Vector2.h"
-#include "Types.h"
+#include "TypeDefines.h"
 
 void CreateDrawUnit(DrawUnit* draw_unit, const Vector2* position, const wchar_t* shape, WORD attribute)
 {

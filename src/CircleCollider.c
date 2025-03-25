@@ -1,7 +1,7 @@
 #include "CircleCollider.h"
 
 #include "Vector2.h"
-#include "Types.h"
+#include "TypeDefines.h"
 
 CircleCollider CreateCircleCollider(const Vector2* position, float radius)
 {

@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <memory.h>
 
-#include "Types.h"
+#include "TypeDefines.h"
 #include "Global.h"
 #include "DebugUtility.h"
 

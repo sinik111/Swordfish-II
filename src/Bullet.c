@@ -8,7 +8,7 @@
 #include "Global.h"
 #include "MyTime.h"
 #include "Vector2.h"
-#include "Types.h"
+#include "TypeDefines.h"
 #include "DebugUtility.h"
 #include "Enemy.h"
 #include "UnionList.h"

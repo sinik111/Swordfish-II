@@ -6,7 +6,7 @@
 #include "UnionList.h"
 #include "ConsoleRenderer.h"
 #include "Player.h"
-#include "Types.h"
+#include "TypeDefines.h"
 #include "Enemy.h"
 #include "CircleCollider.h"
 #include "DebugUtility.h"

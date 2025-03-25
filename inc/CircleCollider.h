@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Vector2.h"
-#include "Types.h"
+#include "TypeDefines.h"
 
 typedef struct CircleCollider
 {

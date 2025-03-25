@@ -1,25 +1,28 @@
 #include "Shape.h"
 
 #include <stdlib.h>
+#include <wchar.h>
 
+#include "Vector2.h"
 #include "UnionList.h"
 #include "FileLoader.h"
 #include "Global.h"
 #include "ConsoleRenderer.h"
+#include "TypeDefines.h"
 
 static ShapeData* player_shape_data = NULL;
 static ShapeData* enemy_1_shape_data = NULL;
 
-static void CreateEffectData(const wchar_t* file_name, ShapeType type);
+static void CreateShapeData(const wchar_t* file_name, ShapeType type);
 static void ReleaseShapeDataList(ShapeData* shape_Data);
 
 void InitializeShapeData()
 {
-	CreateEffectData(L"player_shape.txt", PLAYER_SHAPE);
-	CreateEffectData(L"enemy_1_shape.txt", ENEMY_1_SHAPE);
+	CreateShapeData(L"player_shape.txt", PLAYER_SHAPE);
+	CreateShapeData(L"enemy_1_shape.txt", ENEMY_1_SHAPE);
 }
 
-static void CreateEffectData(const wchar_t* file_name, ShapeType type)
+static void CreateShapeData(const wchar_t* file_name, ShapeType type)
 {
 	StringData* sd = LoadSingleLineData(file_name);
 	if (sd == NULL)
@@ -109,8 +112,10 @@ void RenderShape(const Vector2* position, ShapeType type, int frame)
 	Node* current_shape_node = current_frame_list->data.effect_list->head;
 	while (current_shape_node != NULL)
 	{
+		wchar_t shape = current_shape_node->data.draw_unit.shape;
+		WORD attribute = current_shape_node->data.draw_unit.attribute;
 		Vector2 shape_position = AddVector2(position, &current_shape_node->data.draw_unit.position);
-		ScreenDrawChar((int)shape_position.x, (int)shape_position.y, current_shape_node->data.draw_unit.shape, current_shape_node->data.draw_unit.attribute);
+		ScreenDrawChar((int)shape_position.x, (int)shape_position.y, shape, attribute);
 
 		current_shape_node = current_shape_node->next;
 	}

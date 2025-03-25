@@ -2,7 +2,7 @@
 
 #include <wchar.h>
 
-#include "Types.h"
+#include "TypeDefines.h"
 
 // Attributes flags. 이거 쓰려고 windows.h가 여기 include 되어있어서 그냥 빼서 직접 define해둠
 

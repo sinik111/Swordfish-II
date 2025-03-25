@@ -6,7 +6,7 @@
 #include <wchar.h>
 
 #include "DebugUtility.h"
-#include "Types.h"
+#include "TypeDefines.h"
 
 StringData* LoadSingleLineData(const wchar_t* file_name)
 {
@@ -56,9 +56,10 @@ StringData* LoadSingleLineData(const wchar_t* file_name)
 		return NULL;
 	}
 
-	wchar_t header[50];
+	wchar_t header[100];
 
-	fgetws(header, 50, fp);
+	fgetws(header, 100, fp);
+	fgetws(header, 100, fp);
 
 	int result = swscanf(header, L"%d %d %d %d %d %d",
 		&sd->m, &sd->n, &sd->count, &sd->additional1, &sd->additional2, &sd->additional3);
@@ -128,9 +129,10 @@ StringData* LoadMultiLineData(const wchar_t* file_name)
 		return NULL;
 	}
 
-	wchar_t header[50];
+	wchar_t header[100];
 
-	fgetws(header, 50, fp);
+	fgetws(header, 100, fp);
+	fgetws(header, 100, fp);
 
 	int result = swscanf(header, L"%d %d %d %d %d %d",
 		&sd->m, &sd->n, &sd->count, &sd->additional1, &sd->additional2, &sd->additional3);

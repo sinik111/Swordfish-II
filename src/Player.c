@@ -11,7 +11,7 @@
 #include "Vector2.h"
 #include "Bullet.h"
 #include "DebugUtility.h"
-#include "Types.h"
+#include "TypeDefines.h"
 #include "Game.h"
 #include "PlayScene.h"
 

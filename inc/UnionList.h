@@ -1,11 +1,23 @@
 #pragma once
 
-#include "Types.h"
+#include "TypeDefines.h"
 
 #include "Bullet.h"
 #include "Enemy.h"
 #include "DrawUnit.h"
 #include "Effect.h"
+#include "EnemySpawner.h"
+
+typedef enum DataType
+{
+	PLAYER,
+	BULLET,
+	ENEMY,
+	LIST,
+	DRAW_UNIT,
+	EFFECT,
+	ENEMY_SPAWN_DATA
+} DataType;
 
 // 리스트에 여러가지 타입들을 담을 수 있게 union을 이용함.
 typedef struct UnionNode
@@ -22,6 +34,7 @@ typedef struct UnionNode
 		List* shape_list;
 		DrawUnit draw_unit;
 		Effect effect;
+		EnemySpawnData spawn_data;
 	} data;
 	struct UnionNode* next;
 } Node;
