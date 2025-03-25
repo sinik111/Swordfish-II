@@ -10,7 +10,7 @@ typedef struct UIplayerHP
 {
 	long long id;
 	Vector2 position;
-	wchar_t ui_shape[20];
+	wchar_t ui_shape[40];
 } UIplayerHP;
 
 UIplayerHP* CreateUIplayerHP();

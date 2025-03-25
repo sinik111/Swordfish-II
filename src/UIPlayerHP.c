@@ -22,7 +22,7 @@ UIplayerHP* CreateUIplayerHP()
 
 	ui->id = GenerateID();
 	ui->position = ZeroVector;
-	wmemset(ui->ui_shape, 0, 20);
+	wmemset(ui->ui_shape, 0, 40);
 	//▋
 
 	return ui;
@@ -30,7 +30,7 @@ UIplayerHP* CreateUIplayerHP()
 
 void UpdateUIplayerHP(UIplayerHP* ui)
 {
-	wmemset(ui->ui_shape, 0, 20);
+	wmemset(ui->ui_shape, 0, 40);
 
 	wmemcpy_s(ui->ui_shape, 3, L"HP ", 3);
 	

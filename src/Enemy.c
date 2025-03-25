@@ -69,7 +69,7 @@ void SetEnemyplayer(Player* player)
 
 void EnemyTakeDamage(Enemy* enemy, int damage)
 {
-	DebugLog("Enemy %lld HP: %d\n", enemy->id, enemy->hp);
+	//DebugLog("Enemy %lld HP: %d\n", enemy->id, enemy->hp);
 	enemy->hp -= damage;
 }
 

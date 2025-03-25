@@ -34,7 +34,7 @@ Player* CreatePlayer()
 	player->position = pos;
 	player->x_speed = 60.0f;
 	player->y_speed = 30.0f;
-	player->hp = 10;
+	player->hp = 30;
 	player->fire_rate = 0.1f;
 	player->is_destroyed = FALSE;
 	player->collider.radius = 2.0f;
@@ -90,7 +90,7 @@ void PlayerTakeDamage(Player* player, int damage)
 {
 	player->hp -= damage;
 
-	DebugLog("Player HP: %d\n", player->hp);
+	//DebugLog("Player HP: %d\n", player->hp);
 }
 
 void DestroyPlayer(Player* player)
