@@ -1,9 +1,14 @@
 #include "EnemySpawner.h"
 
-#include <math.h>
+#include <stdlib.h>
 
 #include "FileLoader.h"
 #include "UnionList.h"
+#include "MyTime.h"
+#include "PlayScene.h"
+#include "Enemy.h"
+#include "Global.h"
+#include "DebugUtility.h"
 
 // 시작 지점 지정
 // 
@@ -13,12 +18,15 @@
 //
 // 종료 지점 지정
 
-List* enemy_spawn_data_list = NULL;
+static List* enemy_spawn_data_list = NULL;
+static float enemy_spawn_timer;
 
 static void CreateEnemySpawnData(const wchar_t* file_name);
 
 void InitializeEnemySpawnData()
 {
+	enemy_spawn_timer = 0.0f;
+
 	CreateEnemySpawnData(L"enemy_spawn_data.txt");
 }
 
@@ -30,58 +38,57 @@ static void CreateEnemySpawnData(const wchar_t* file_name)
 		return;
 	}
 
-	/*enemy_spawn_data_list = CreateList()
+	enemy_spawn_data_list = CreateList(ENEMY_SPAWN_DATA);
 
-	EffectData* data = (EffectData*)malloc(sizeof(EffectData));
-	if (data == NULL)
+	for (int i = 0; i < sd->count; ++i)
 	{
-		return;
-	}
+		EnemySpawnData data;
+		data.id = GenerateID();
+		int result = swscanf(sd->data + i * sd->m,
+			L"%d %d %hd %f %f %hd %hd %d %f %f %hd %hd %d %f %f %hd %hd %d %f %f",
+			&data.enemy_type, &data.enemy_movement_type, &data.spawn_time, &data.spawn_position.x,
+			&data.spawn_position.y, &data.way_count, &data.way1_speed, &data.way1_speed_type,
+			&data.way1_position.x, &data.way1_position.y, &data.way1_time, &data.way2_speed,
+			&data.way2_speed_type, &data.way2_position.x, &data.way2_position.y, &data.way2_time,
+			&data.end_speed, &data.end_speed_type, &data.end_position.x, &data.end_position.y);
 
-	switch (type)
-	{
-	case BULLET_HIT_EFFECT:
-		bullet_hit_effect_data = data;
-		break;
-
-	case PLAYER_FLAME_EFFECT:
-		player_flame_effect_data = data;
-		break;
-
-	default:
-		return;
-	}
-
-	List* effect_frame_list = CreateList(LIST);
-	effect_frame_list->id = GenerateID();
-	data->id = GenerateID();
-	data->effect_frame_list = effect_frame_list;
-	data->frames = sd->count;
-	data->duration = (float)sd->additional1 / sd->additional3;
-
-	for (int c = 0; c < sd->count; ++c)
-	{
-		List* effect_frames = CreateList(DRAW_UNIT);
-		effect_frames->id = GenerateID();
-		Insert(effect_frame_list, &effect_frames, sizeof(List*));
-
-		for (int i = 0; i < sd->n; ++i)
-		{
-			for (int j = 0; j < sd->m; ++j)
-			{
-				wchar_t shape = 0;
-				shape = *(sd->data + (j + i * sd->m + c * sd->m * sd->n));
-				if (shape != L' ')
-				{
-					DrawUnit draw_unit;
-					Vector2 position = { (float)(j - sd->m / 2), (float)(i - sd->n / 2) };
-					CreateDrawUnit(&draw_unit, &position, &shape, sd->additional2);
-					Insert(effect_frames, &draw_unit, sizeof(DrawUnit));
-				}
-			}
-		}
+		Insert(enemy_spawn_data_list, &data, sizeof(EnemySpawnData));
 	}
 
 	free(sd->data);
-	free(sd);*/
+	free(sd);
+}
+
+void UpdateEnemySpawner()
+{
+	enemy_spawn_timer += DeltaTime();
+
+	Node* fastest_node = enemy_spawn_data_list->head;
+	while (fastest_node != NULL)
+	{
+		if (fastest_node->data.spawn_data.spawn_time <= enemy_spawn_timer)
+		{
+			Enemy enemy;
+			enemy.spawn_data = fastest_node->data.spawn_data;
+			CreateEnemy(&enemy);
+
+			Insert(GetEnemyList(), &enemy, sizeof(Enemy));
+			DebugLog("enemy created\n");
+			fastest_node = Remove(enemy_spawn_data_list, fastest_node->data.id);
+		}
+		else
+		{
+			break;
+		}
+	}
+}
+
+void ReleaseEnemySpawnData()
+{
+	if (enemy_spawn_data_list != NULL)
+	{
+		DeleteList(enemy_spawn_data_list);
+
+		enemy_spawn_data_list = NULL;
+	}
 }

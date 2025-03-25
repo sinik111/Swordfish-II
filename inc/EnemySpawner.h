@@ -9,10 +9,7 @@ typedef enum EnemyMovementType
 	WAVE
 } EnemyMovementType;
 
-typedef enum EnemyType
-{
-	ENEMY_TYPE_0
-} EnemyType;
+typedef enum EnemyType EnemyType;
 
 typedef enum EnemySpeedType
 {
@@ -24,6 +21,7 @@ typedef enum EnemySpeedType
 
 typedef struct EnemySpawnData
 {
+	long long id;
 	EnemyType enemy_type;
 	EnemyMovementType enemy_movement_type;
 	Vector2 spawn_position;
@@ -43,3 +41,7 @@ typedef struct EnemySpawnData
 } EnemySpawnData;
 
 void InitializeEnemySpawnData();
+
+void UpdateEnemySpawner();
+
+void ReleaseEnemySpawnData();

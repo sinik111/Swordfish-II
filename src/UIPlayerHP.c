@@ -8,8 +8,7 @@
 #include "Global.h"
 #include "Vector2.h"
 #include "DebugUtility.h"
-
-static Player* sword_fish = NULL;
+#include "PlayScene.h"
 
 UIplayerHP* CreateUIplayerHP()
 {
@@ -34,7 +33,8 @@ void UpdateUIplayerHP(UIplayerHP* ui)
 
 	wmemcpy_s(ui->ui_shape, 3, L"HP ", 3);
 	
-	for (int i = 0; i < sword_fish->hp; ++i)
+	Player* player = GetPlayer();
+	for (int i = 0; i < player->hp; ++i)
 	{
 		ui->ui_shape[i + 3] = L'▋';
 	}
@@ -43,14 +43,4 @@ void UpdateUIplayerHP(UIplayerHP* ui)
 void RenderUIplayerHP(UIplayerHP* ui)
 {
 	ScreenDrawString((int)ui->position.x, (int)ui->position.y, ui->ui_shape, FG_WHITE);
-}
-
-void DeleteUIplayerHP(UIplayerHP* ui)
-{
-	sword_fish = NULL;
-}
-
-void SetUIplayerHPplayer(Player* player)
-{
-	sword_fish = player;
 }

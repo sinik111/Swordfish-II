@@ -13,6 +13,7 @@
 #include "Collision.h"
 #include "UIplayerHP.h"
 #include "Effect.h"
+#include "MyTime.h"
 
 static Player* player = NULL;
 static List* bullet_list = NULL;
@@ -37,27 +38,18 @@ void InitializePlayScene()
 
 	player = CreatePlayer();
 	bullet_list = CreateList(BULLET);
-
-	SetEnemyplayer(player);
-
 	enemy_bullet_list = CreateList(BULLET);
-	SetEnemyBulletList(enemy_bullet_list);
-
 	enemy_list = CreateList(ENEMY);
-	for (int i = 0; i < 20; ++i)
-	{
-		Enemy enemy;
-		CreateEnemy(&enemy);
-		Insert(enemy_list, &enemy, sizeof(Enemy));
-	}
 
 	hp_ui = CreateUIplayerHP();
-	SetUIplayerHPplayer(player);
 
 	InitializeEffectData();
 
 	effect_list = CreateList(EFFECT);
-	SetEffectBulletHitList(effect_list);
+
+	InitializeEnemySpawnData();
+
+	UpdateTime();
 }
 
 void UpdatePlayScene()
@@ -71,6 +63,8 @@ void UpdatePlayScene()
 	UpdateBulletList();
 	UpdateEnemyBulletList();
 	UpdateEnemyList();
+
+	UpdateEnemySpawner();
 
 	// effect
 	UpdateEffectList();
@@ -130,7 +124,6 @@ void ReleasePlayScene()
 		DeleteList(enemy_bullet_list);
 
 		enemy_bullet_list = NULL;
-		SetEnemyBulletList(NULL);
 	}
 
 	DeletePlayer(&player);
@@ -152,8 +145,6 @@ void ReleasePlayScene()
 
 	if (hp_ui != NULL)
 	{
-		DeleteUIplayerHP(hp_ui);
-
 		free(hp_ui);
 	}
 
@@ -162,6 +153,7 @@ void ReleasePlayScene()
 
 	ReleaseEffectData();
 	ReleaseShapeData();
+	ReleaseEnemySpawnData();
 }
 
 List* GetEffectList()
@@ -172,6 +164,21 @@ List* GetEffectList()
 List* GetPlayerBulletList()
 {
 	return bullet_list;
+}
+
+List* GetEnemyList()
+{
+	return enemy_list;
+}
+
+List* GetEnemyBulletList()
+{
+	return enemy_bullet_list;
+}
+
+Player* GetPlayer()
+{
+	return player;
 }
 
 static void UpdateBulletList()

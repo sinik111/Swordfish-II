@@ -40,6 +40,4 @@ BOOL IsBulletDestroyed(Bullet* bullet);
 
 void DeleteBullet(Bullet* bullet);
 
-void SetEffectBulletHitList(List* list);
-
 void PlayBulletHitEffect(Bullet* bullet);

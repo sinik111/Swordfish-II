@@ -12,24 +12,41 @@
 #include "Player.h"
 #include "DebugUtility.h"
 #include "Shape.h"
+#include "PlayScene.h"
 
-static List* enemy_bullet_list = NULL;
-static Player* enemy_player = NULL;
 static float fire_timer = 0.0f;
 
 void CreateEnemy(Enemy* enemy)
 {
 	enemy->id = GenerateID();
-	vec2 pos = { (float)(rand() % ScreenWidth() / 2 + 60), (float)(rand() % ScreenHeight())};
-	enemy->position = pos;
+	//vec2 pos = { (float)(rand() % ScreenWidth() / 2 + 60), (float)(rand() % ScreenHeight())};
+	//enemy->position = pos;
 	enemy->collider.radius = 2.0f;
 	enemy->hp = 5;
 	enemy->is_destroyed = FALSE;
-	wmemcpy_s(enemy->shape, 2, L"бс", 2);
+	enemy->position = enemy->spawn_data.spawn_position;
+	enemy->type = enemy->spawn_data.enemy_type;
+	//wmemcpy_s(enemy->shape, 2, L"бс", 2);
 }
 
 void UpdateEnemy(Enemy* enemy)
 {
+	vec2 direction = SubVector2(&enemy->spawn_data.end_position, &enemy->position);
+	float remain_distance = GetVecter2Length(&direction);
+	NormalizeVector2(&direction);
+	float movement = enemy->spawn_data.end_speed * DeltaTime();
+
+	if (movement >= remain_distance)
+	{
+		enemy->position = enemy->spawn_data.end_position;
+		DestroyEnemy(enemy);
+	}
+	else
+	{
+		vec2 transition = ScalarMulVector2(&direction, movement);
+		enemy->position = AddVector2(&enemy->position, &transition);
+	}
+
 	if (enemy->hp < 0)
 	{
 		DestroyEnemy(enemy);
@@ -40,9 +57,9 @@ void UpdateEnemy(Enemy* enemy)
 	{
 		Bullet bullet;
 		CreateEnemyBullet(&bullet, enemy);
-		bullet.direction = MakeDirectionVector2(&enemy_player->position, &bullet.position);
+		bullet.direction = LeftVector;//MakeDirectionVector2(&enemy_player->position, &bullet.position);
 
-		Insert(enemy_bullet_list, &bullet, sizeof(Bullet));
+		Insert(GetEnemyBulletList(), &bullet, sizeof(Bullet));
 
 		fire_timer -= 2.0f;
 	}
@@ -57,16 +74,6 @@ void RenderEnemy(Enemy* enemy)
 void DeleteEnemy(Enemy* enemy)
 {
 	
-}
-
-void SetEnemyBulletList(List* bullet_list)
-{
-	enemy_bullet_list = bullet_list;
-}
-
-void SetEnemyplayer(Player* player)
-{
-	enemy_player = player;
 }
 
 void EnemyTakeDamage(Enemy* enemy, int damage)

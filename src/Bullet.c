@@ -13,8 +13,7 @@
 #include "Enemy.h"
 #include "UnionList.h"
 #include "Effect.h"
-
-static List* effect_list = NULL;
+#include "PlayScene.h"
 
 void CreateBullet(Bullet* bullet, Player* player)
 {
@@ -76,15 +75,10 @@ void DeleteBullet(Bullet* bullet)
 
 }
 
-void SetEffectBulletHitList(List* list)
-{
-	effect_list = list;
-}
-
 void PlayBulletHitEffect(Bullet* bullet)
 {
 	Effect effect;
 
 	CreateEffect(&effect, &bullet->position, BULLET_HIT_EFFECT);
-	Insert(effect_list, &effect, sizeof(Effect));
+	Insert(GetEffectList(), &effect, sizeof(Effect));
 }

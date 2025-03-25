@@ -18,7 +18,3 @@ UIplayerHP* CreateUIplayerHP();
 void UpdateUIplayerHP(UIplayerHP* ui);
 
 void RenderUIplayerHP(UIplayerHP* ui);
-
-void DeleteUIplayerHP(UIplayerHP* ui);
-
-void SetUIplayerHPplayer(Player* player);
