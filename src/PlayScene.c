@@ -12,24 +12,24 @@
 #include "DebugUtility.h"
 #include "Collision.h"
 #include "UIplayerHP.h"
-#include "EffectBulletHit.h"
+#include "Effect.h"
 
 static Player* player = NULL;
 static List* bullet_list = NULL;
 static List* enemy_list = NULL;
 static List* enemy_bullet_list = NULL;
 static UIplayerHP* hp_ui = NULL;
-static List* effect_bullet_hit_list = NULL;
+static List* effect_list = NULL;
 
 static void UpdateBulletList();
 static void UpdateEnemyList();
 static void UpdateEnemyBulletList();
-static void UpdateEffectBulletHitList();
+static void UpdateEffectList();
 
 static void RenderBulletList();
 static void RenderEnemyList();
 static void RenderEnemyBulletList();
-static void RenderEffectBulletHitList();
+static void RenderEffectList();
 
 void InitializePlayScene()
 {
@@ -53,10 +53,10 @@ void InitializePlayScene()
 	hp_ui = CreateUIplayerHP();
 	SetUIplayerHPplayer(player);
 
-	CreateEffectBulletHitData();
+	InitializeEffectData();
 
-	effect_bullet_hit_list = CreateList(EFFECT_BULLET_HIT);
-	SetEffectBulletHitList(effect_bullet_hit_list);
+	effect_list = CreateList(EFFECT);
+	SetEffectBulletHitList(effect_list);
 }
 
 void UpdatePlayScene()
@@ -72,7 +72,7 @@ void UpdatePlayScene()
 	UpdateEnemyList();
 
 	// effect
-	UpdateEffectBulletHitList();
+	UpdateEffectList();
 
 	// ui
 	UpdateUIplayerHP(hp_ui);
@@ -89,7 +89,7 @@ void RenderPlayScene()
 	RenderEnemyList();
 
 	// effect
-	RenderEffectBulletHitList();
+	RenderEffectList();
 
 	// ui
 	RenderUIplayerHP(hp_ui);
@@ -97,13 +97,7 @@ void RenderPlayScene()
 	ScreenDrawString(ScreenWidth() / 2 - 8, ScreenHeight() / 2 + 5, L"press A to fire", FG_WHITE);
 	ScreenDrawString(ScreenWidth() / 2 - 12, ScreenHeight() / 2 + 9, L"press space to countinue", FG_PINK);
 
-	//ScreenDrawString(0, 0, L"   ▁▁▁", FG_RED);
-	//ScreenDrawString(0, 1, L"    █", FG_RED);
-	//ScreenDrawString(0, 2, L"  ▅▅█▅▃▂▁", FG_RED);
-	//ScreenDrawString(0, 2, L"▅", FG_SKY);
-	//ScreenDrawString(1, 2, L"▅", FG_GRAY);
-	//ScreenDrawString(0, 3, L"    █", FG_RED);
-	//ScreenDrawString(0, 4, L"   ▔▔▔", FG_RED);
+
 }
 
 void ReleasePlayScene()
@@ -164,10 +158,10 @@ void ReleasePlayScene()
 		free(hp_ui);
 	}
 
-	DeleteList(effect_bullet_hit_list);
-	effect_bullet_hit_list = NULL;
+	DeleteList(effect_list);
+	effect_list = NULL;
 
-	DeleteEffectBulletHit();
+	ReleaseEffectData();
 }
 
 static void UpdateBulletList()
@@ -230,16 +224,16 @@ static void UpdateEnemyList()
 	}
 }
 
-static void UpdateEffectBulletHitList()
+static void UpdateEffectList()
 {
 	Node* previous_node = NULL;
-	Node* current_node = effect_bullet_hit_list->head;
+	Node* current_node = effect_list->head;
 	while (current_node != NULL)
 	{
-		UpdateEffectBulletHit(&current_node->data.effect_bullet_hit);
-		if (IsEffectBulletHitDestroyed(&current_node->data.effect_bullet_hit))
+		UpdateEffect(&current_node->data.effect);
+		if (IsEffectDestroyed(&current_node->data.effect))
 		{
-			current_node = RemoveNode(effect_bullet_hit_list, previous_node, current_node);
+			current_node = RemoveNode(effect_list, previous_node, current_node);
 		}
 		else
 		{
@@ -282,12 +276,12 @@ static void RenderEnemyList()
 	}
 }
 
-static void RenderEffectBulletHitList()
+static void RenderEffectList()
 {
-	Node* current_node = effect_bullet_hit_list->head;
+	Node* current_node = effect_list->head;
 	while (current_node != NULL)
 	{
-		RenderEffectBulletHit(&current_node->data.effect_bullet_hit);
+		RenderEffect(&current_node->data.effect);
 
 		current_node = current_node->next;
 	}

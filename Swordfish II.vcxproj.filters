@@ -93,14 +93,14 @@
     <ClCompile Include="src\UIPlayerHP.c">
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
-    <ClCompile Include="src\EffectBulletHit.c">
-      <Filter>소스 파일\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="src\EffectUnit.c">
+    <ClCompile Include="src\DrawUnit.c">
       <Filter>소스 파일\Utility</Filter>
     </ClCompile>
     <ClCompile Include="src\FileLoader.c">
       <Filter>소스 파일\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Effect.c">
+      <Filter>소스 파일\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -158,14 +158,14 @@
     <ClInclude Include="inc\UIPlayerHP.h">
       <Filter>헤더 파일\Object</Filter>
     </ClInclude>
-    <ClInclude Include="inc\EffectBulletHit.h">
-      <Filter>헤더 파일\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\EffectUnit.h">
+    <ClInclude Include="inc\DrawUnit.h">
       <Filter>헤더 파일\Utility</Filter>
     </ClInclude>
     <ClInclude Include="inc\FileLoader.h">
       <Filter>헤더 파일\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Effect.h">
+      <Filter>헤더 파일\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

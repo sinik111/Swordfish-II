@@ -1,0 +1,7 @@
+	//ScreenDrawString(0, 0, L"   ▁▁▁", FG_RED);
+	//ScreenDrawString(0, 1, L"    █", FG_RED);
+	//ScreenDrawString(0, 2, L"  ▅▅█▅▃▂▁", FG_RED);
+	//ScreenDrawString(0, 2, L"▅", FG_SKY);
+	//ScreenDrawString(1, 2, L"▅", FG_GRAY);
+	//ScreenDrawString(0, 3, L"    █", FG_RED);
+	//ScreenDrawString(0, 4, L"   ▔▔▔", FG_RED);

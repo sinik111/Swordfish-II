@@ -4,8 +4,8 @@
 
 #include "Bullet.h"
 #include "Enemy.h"
-#include "EffectUnit.h"
-#include "EffectBulletHit.h"
+#include "DrawUnit.h"
+#include "Effect.h"
 
 // 리스트에 여러가지 타입들을 담을 수 있게 union을 이용함.
 typedef struct UnionNode
@@ -19,8 +19,8 @@ typedef struct UnionNode
 		Bullet bullet;
 		Enemy enemy;
 		List* effect_list;
-		EffectUnit effect_unit;
-		EffectBulletHit effect_bullet_hit;
+		DrawUnit draw_unit;
+		Effect effect;
 	} data;
 	struct UnionNode* next;
 } Node;

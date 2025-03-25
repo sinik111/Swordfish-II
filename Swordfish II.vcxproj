@@ -136,12 +136,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Bullet.c" />
-    <ClCompile Include="src\EffectBulletHit.c" />
+    <ClCompile Include="src\Effect.c" />
     <ClCompile Include="src\CircleCollider.c" />
     <ClCompile Include="src\Collision.c" />
     <ClCompile Include="src\ConsoleRenderer.c" />
     <ClCompile Include="src\DebugUtility.c" />
-    <ClCompile Include="src\EffectUnit.c" />
+    <ClCompile Include="src\DrawUnit.c" />
     <ClCompile Include="src\EndScene.c" />
     <ClCompile Include="src\Enemy.c" />
     <ClCompile Include="src\FileLoader.c" />
@@ -163,8 +163,8 @@
     <ClInclude Include="inc\Collision.h" />
     <ClInclude Include="inc\ConsoleRenderer.h" />
     <ClInclude Include="inc\DebugUtility.h" />
-    <ClInclude Include="inc\EffectBulletHit.h" />
-    <ClInclude Include="inc\EffectUnit.h" />
+    <ClInclude Include="inc\Effect.h" />
+    <ClInclude Include="inc\DrawUnit.h" />
     <ClInclude Include="inc\EndScene.h" />
     <ClInclude Include="inc\Enemy.h" />
     <ClInclude Include="inc\FileLoader.h" />
