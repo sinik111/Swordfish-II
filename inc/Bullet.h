@@ -10,6 +10,11 @@ typedef struct Player Player;
 typedef struct Enemy Enemy;
 typedef struct UnionList List;
 
+typedef enum BulletType
+{
+	PLAYER_CANON
+} BulletType;
+
 typedef struct Bullet
 {
 	long long id;
@@ -18,13 +23,17 @@ typedef struct Bullet
 		CircleCollider collider;
 	};
 	Vector2 direction;
-	float x_speed;
-	float y_speed;
+	float speed;
 	float timer;
 	int damage;
 	BOOL is_destroyed;
+	BOOL has_flame;
+	float back_flame_timer;
 	wchar_t shape[2];
+	BulletType type;
 } Bullet;
+
+void CreateCanonBullet(Bullet* bullet, Player* player);
 
 void CreateBullet(Bullet* bullet, Player* player);
 
@@ -37,7 +46,5 @@ void RenderBullet(Bullet* bullet);
 void DestroyBullet(Bullet* bullet);
 
 BOOL IsBulletDestroyed(Bullet* bullet);
-
-void DeleteBullet(Bullet* bullet);
 
 void PlayBulletHitEffect(Bullet* bullet);

@@ -108,6 +108,9 @@
     <ClCompile Include="src\EnemySpawner.c">
       <Filter>소스 파일\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Boss.c">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Collision.h">
@@ -178,6 +181,9 @@
     </ClInclude>
     <ClInclude Include="inc\EnemySpawner.h">
       <Filter>헤더 파일\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Boss.h">
+      <Filter>헤더 파일\Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

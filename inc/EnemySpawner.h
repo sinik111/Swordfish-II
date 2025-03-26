@@ -2,21 +2,24 @@
 
 #include "Vector2.h"
 
+#include "TypeDefines.h"
+
 typedef enum EnemyMovementType
 {
-	STRAIGHT,
-	WAYPOINT,
-	WAVE
+	STRAIGHT = 0,
+	WAYPOINT = 1,
+	WAVE = 2
 } EnemyMovementType;
 
 typedef enum EnemyType EnemyType;
 
 typedef enum EnemySpeedType
 {
-	LINEAR,
-	EASE_IN,
-	EASE_OUT,
-	SIN
+	LINEAR = 0,
+	EASE_IN = 1,
+	EASE_OUT = 2,
+	SIN = 3,
+	NONE_SPEED_TYPE = 4
 } EnemySpeedType;
 
 typedef struct EnemySpawnData
@@ -45,3 +48,5 @@ void InitializeEnemySpawnData();
 void UpdateEnemySpawner();
 
 void ReleaseEnemySpawnData();
+
+BOOL IsSpawnerEmpty();

@@ -15,11 +15,10 @@
 #include "Game.h"
 #include "PlayScene.h"
 
-static float player_fire_timer = 0.0f;
-static float player_flame_timer = 0.0f;
-
 static void Translate(Player* player);
-static void Fire(Player* player);
+static void WeaponUpdate(Player* player);
+static void FireCanon(Player* player);
+static void FireMachineGun(Player* player);
 static void ScreenBoundCheck(Player* player);
 static void BackFlame(Player* player);
 
@@ -34,13 +33,16 @@ Player* CreatePlayer()
 	player->id = GenerateID();
 	vec2 pos = { 0.0f, (float)ScreenHeight() / 2 };
 	player->position = pos;
-	player->x_speed = 60.0f;
-	player->y_speed = 30.0f;
+	player->speed = 30.0f;
 	player->hp = 30;
-	player->fire_rate = 0.1f;
+	player->fire_rate = 0.2f;
 	player->is_destroyed = FALSE;
 	player->collider.radius = 2.0f;
-	wmemcpy_s(player->shape, 2, L"▶", 2);
+	player->canon_fire_rate = 0.5f;
+	player->gear_state = GEAR_CANON;
+	player->machine_gun_timer = 0.0f;
+	player->canon_timer = 0.0f;
+	player->flame_timer = 0.0f;
 	
 	return player;
 }
@@ -58,10 +60,7 @@ void UpdatePlayer(Player* player)
 
 	Translate(player);
 
-	if (IsKeyDown('A'))
-	{
-		Fire(player);
-	}
+	WeaponUpdate(player);
 
 	BackFlame(player);
 
@@ -133,8 +132,8 @@ static void Translate(Player* player)
 
 	NormalizeVector2(&direction);
 
-	direction.x *= player->x_speed;
-	direction.y *= player->y_speed;
+	direction.x *= (player->speed * 2);
+	direction.y *= player->speed;
 
 	vec2 transition = ScalarMulVector2(&direction, DeltaTime());
 
@@ -143,15 +142,53 @@ static void Translate(Player* player)
 
 }
 
-static void Fire(Player* player)
+static void WeaponUpdate(Player* player)
 {
-	player_fire_timer += DeltaTime();
-	if (player->fire_rate < player_fire_timer)
+	if (player->gear_state & GEAR_CANON)
 	{
-		player_fire_timer -= player->fire_rate;
-		Bullet bullet;
-		CreateBullet(&bullet, player);
+		FireCanon(player);
+	}
+	
+	//if (player->gear_state & GEAR_MACHINE_GUN)
+	//{
+	//	FireMachineGun(player);
+	//}
+	//
+	//if (player->gear_state & GEAR_MACHINE_GUN)
+	//{
+	//	FireMachineGun(player);
+	//}
+}
+
+static void FireCanon(Player* player)
+{
+	player->canon_timer += DeltaTime();
+	if (IsKeyDown('A'))
+	{
+		if (player->canon_fire_rate < player->canon_timer)
+		{
+			player->canon_timer = 0;
+			Bullet bullet;
+			CreateCanonBullet(&bullet, player);
+			//CreateBullet(&bullet, player);
 		
+			Insert(GetPlayerBulletList(), &bullet, sizeof(Bullet));
+
+			//DebugLog("fire\n");
+		}
+	}
+}
+
+static void FireMachineGun(Player* player)
+{
+	player->machine_gun_timer += DeltaTime();
+	if (player->fire_rate < player->machine_gun_timer)
+	{
+		player->machine_gun_timer -= player->fire_rate;
+		Bullet bullet;
+		//CreateCanonBullet(&bullet, player);
+		CreateBullet(&bullet, player);
+
 		Insert(GetPlayerBulletList(), &bullet, sizeof(Bullet));
 
 		//DebugLog("fire\n");
@@ -183,8 +220,8 @@ static void ScreenBoundCheck(Player* player)
 
 static void BackFlame(Player* player)
 {
-	player_flame_timer += DeltaTime();
-	if (player_flame_timer > 0.05f)
+	player->flame_timer += DeltaTime();
+	if (player->flame_timer > 0.05f)
 	{
 		Effect effect;
 
@@ -195,6 +232,6 @@ static void BackFlame(Player* player)
 
 		Insert(GetEffectList(), &effect, sizeof(Effect));
 
-		player_flame_timer -= 0.05f;
+		player->flame_timer -= 0.05f;
 	}
 }

@@ -7,6 +7,13 @@
 #include "CircleCollider.h"
 #include "Shape.h"
 
+typedef enum PlayerGear
+{
+	GEAR_CANON			= 0b00000001,	// 1
+	GEAR_MACHINE_GUN	= 0b00000010,	// 2
+	GEAR_SHEILD			= 0b00000100	// 4
+} PlayerGear;
+
 typedef struct UnionList List;
 
 typedef struct Player
@@ -16,13 +23,16 @@ typedef struct Player
 		Vector2 position;
 		CircleCollider collider;
 	};
-	float x_speed;
-	float y_speed;
+	float speed;
 	float fire_rate;
+	float canon_fire_rate;
 	int hp;
 	BOOL is_destroyed;
-	wchar_t shape[2];
+	int gear_state;
 	ShapeType shape_type;
+	float machine_gun_timer;
+	float canon_timer;
+	float flame_timer;
 } Player;
 
 Player* CreatePlayer();

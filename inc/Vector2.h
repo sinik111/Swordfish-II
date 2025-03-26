@@ -23,6 +23,8 @@ float GetVecter2Length(const Vector2* v_in); // 벡터의 크기(길이)를 반환함
 
 void NormalizeVector2(Vector2* v_out); // 벡터의 크기(길이)를 1으로 만듦
 
+Vector2 GetNormalizedVector2(const Vector2* v_in); // 벡터의 크기(길이)를 1으로 만듦(리턴형)
+
 Vector2 AddVector2(const Vector2* v1_in, const Vector2* v2_in); // v1_in + v2_in 의 결과를 반환함
 
 Vector2 SubVector2(const Vector2* v1_in, const Vector2* v2_in); // v1_in - v2_in 의 결과를 반환함

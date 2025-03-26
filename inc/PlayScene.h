@@ -1,5 +1,7 @@
 #pragma once
 
+#include "TypeDefines.h"
+
 typedef struct UnionList List;
 typedef struct Player Player;
 
@@ -20,3 +22,5 @@ List* GetEnemyList();
 List* GetEnemyBulletList();
 
 Player* GetPlayer();
+
+BOOL IsEnemyAllDestroyed();

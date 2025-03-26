@@ -14,6 +14,8 @@
 
 static EffectData* bullet_hit_effect_data = NULL;
 static EffectData* player_flame_effect_data = NULL;
+static EffectData* canon_flame_effect_data = NULL;
+static EffectData* enemy_destroy_effect_data = NULL;
 
 static void CreateEffectData(const wchar_t* file_name, EffectType type);
 static void ReleaseEffectDataList(EffectData* data);
@@ -22,6 +24,8 @@ void InitializeEffectData()
 {
 	CreateEffectData(L"effect_bullet_hit.txt", BULLET_HIT_EFFECT);
 	CreateEffectData(L"player_flame.txt", PLAYER_FLAME_EFFECT);
+	CreateEffectData(L"canon_flame.txt", CANON_FLAME_EFFECT);
+	CreateEffectData(L"effect_enemy_destroy.txt", ENEMY_DESTROY_EFFECT);
 }
 
 static void CreateEffectData(const wchar_t* file_name, EffectType type)
@@ -46,6 +50,14 @@ static void CreateEffectData(const wchar_t* file_name, EffectType type)
 
 	case PLAYER_FLAME_EFFECT:
 		player_flame_effect_data = data;
+		break;
+
+	case CANON_FLAME_EFFECT:
+		canon_flame_effect_data = data;
+		break;
+
+	case ENEMY_DESTROY_EFFECT:
+		enemy_destroy_effect_data = data;
 		break;
 
 	default:
@@ -108,6 +120,14 @@ void UpdateEffect(Effect* effect)
 		effect_data = player_flame_effect_data;
 		break;
 
+	case CANON_FLAME_EFFECT:
+		effect_data = canon_flame_effect_data;
+		break;
+
+	case ENEMY_DESTROY_EFFECT:
+		effect_data = enemy_destroy_effect_data;
+		break;
+
 	default:
 		return;
 	}
@@ -130,6 +150,13 @@ void RenderEffect(Effect* effect)
 
 	case PLAYER_FLAME_EFFECT:
 		effect_data = player_flame_effect_data;
+		break;
+	case CANON_FLAME_EFFECT:
+		effect_data = canon_flame_effect_data;
+		break;
+
+	case ENEMY_DESTROY_EFFECT:
+		effect_data = enemy_destroy_effect_data;
 		break;
 
 	default:
@@ -156,6 +183,19 @@ void RenderEffect(Effect* effect)
 		{
 			attribute = rand() % 15 + 1;
 		}
+		else if (attribute == 98)
+		{
+			int random = rand() % 2;
+
+			if (random)
+			{
+				attribute = FG_RED;
+			}
+			else
+			{
+				attribute = FG_YELLOW;
+			}
+		}
 		ScreenDrawChar((int)position.x, (int)position.y, shape, attribute);
 
 		current_shape_node = current_shape_node->next;
@@ -173,6 +213,10 @@ void ReleaseEffectData()
 	bullet_hit_effect_data = NULL;
 	ReleaseEffectDataList(player_flame_effect_data);
 	player_flame_effect_data = NULL;
+	ReleaseEffectDataList(canon_flame_effect_data);
+	canon_flame_effect_data = NULL;
+	ReleaseEffectDataList(enemy_destroy_effect_data);
+	enemy_destroy_effect_data = NULL;
 }
 
 static void ReleaseEffectDataList(EffectData* data)

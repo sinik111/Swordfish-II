@@ -9,6 +9,8 @@ typedef enum EffectType
 {
 	BULLET_HIT_EFFECT,
 	PLAYER_FLAME_EFFECT,
+	CANON_FLAME_EFFECT,
+	ENEMY_DESTROY_EFFECT
 } EffectType;
 
 typedef struct UnionList List;

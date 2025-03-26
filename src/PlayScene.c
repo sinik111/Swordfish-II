@@ -14,6 +14,7 @@
 #include "UIplayerHP.h"
 #include "Effect.h"
 #include "MyTime.h"
+#include "Game.h"
 
 static Player* player = NULL;
 static List* bullet_list = NULL;
@@ -54,6 +55,13 @@ void InitializePlayScene()
 
 void UpdatePlayScene()
 {
+	// Boss Encounter
+	if (IsSpawnerEmpty() && IsEnemyAllDestroyed())
+	{
+		// boss 생성코드
+		ChangeScene(END);
+	}
+
 	// collision
 	CheckBulletsToEnemiesCollision(bullet_list, enemy_list);
 	CheckPlayerToEnemyBulletsCollision(player, enemy_bullet_list);
@@ -101,8 +109,6 @@ void ReleasePlayScene()
 		current_node = bullet_list->head;
 		while (current_node != NULL)
 		{
-			DeleteBullet(&current_node->data.bullet);
-
 			current_node = current_node->next;
 		}
 
@@ -116,8 +122,6 @@ void ReleasePlayScene()
 		current_node = enemy_bullet_list->head;
 		while (current_node != NULL)
 		{
-			DeleteBullet(&current_node->data.bullet);
-
 			current_node = current_node->next;
 		}
 
@@ -181,6 +185,16 @@ Player* GetPlayer()
 	return player;
 }
 
+BOOL IsEnemyAllDestroyed()
+{
+	if (enemy_list->head == NULL)
+	{
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
 static void UpdateBulletList()
 {
 	Node* previous_node = NULL;
@@ -190,7 +204,6 @@ static void UpdateBulletList()
 		UpdateBullet(&current_node->data.bullet);
 		if (IsBulletDestroyed(&current_node->data.bullet))
 		{
-			DeleteBullet(&current_node->data.bullet);
 			current_node = RemoveNode(bullet_list, previous_node, current_node);
 		}
 		else
@@ -210,7 +223,6 @@ static void UpdateEnemyBulletList()
 		UpdateBullet(&current_node->data.bullet);
 		if (IsBulletDestroyed(&current_node->data.bullet))
 		{
-			DeleteBullet(&current_node->data.bullet);
 			current_node = RemoveNode(enemy_bullet_list, previous_node, current_node);
 		}
 		else

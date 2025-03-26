@@ -135,6 +135,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Boss.c" />
     <ClCompile Include="src\Bullet.c" />
     <ClCompile Include="src\Effect.c" />
     <ClCompile Include="src\CircleCollider.c" />
@@ -160,6 +161,7 @@
     <ClCompile Include="src\Vector2.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inc\Boss.h" />
     <ClInclude Include="inc\Bullet.h" />
     <ClInclude Include="inc\CircleCollider.h" />
     <ClInclude Include="inc\Collision.h" />

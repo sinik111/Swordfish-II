@@ -34,6 +34,19 @@ void NormalizeVector2(Vector2* v_out) // 벡터의 크기(길이)를 1으로 만듦
 	}
 }
 
+Vector2 GetNormalizedVector2(const Vector2* v_in) // 벡터의 크기(길이)를 1으로 만듦(리턴형)
+{
+	Vector2 normalized = *v_in;
+	float length = GetVecter2Length(&normalized);
+	if (length > 0.0f)
+	{
+		normalized.x /= length;
+		normalized.y /= length;
+	}
+	
+	return normalized;
+}
+
 Vector2 AddVector2(const Vector2* v1_in, const Vector2* v2_in) // v1_in + v2_in 의 결과를 반환함
 {
 	Vector2 v = { v1_in->x + v2_in->x, v1_in->y + v2_in->y };

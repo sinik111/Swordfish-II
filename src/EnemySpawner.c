@@ -9,6 +9,7 @@
 #include "Enemy.h"
 #include "Global.h"
 #include "DebugUtility.h"
+#include "TypeDefines.h"
 
 // 시작 지점 지정
 // 
@@ -97,4 +98,14 @@ void ReleaseEnemySpawnData()
 
 		enemy_spawn_data_list = NULL;
 	}
+}
+
+BOOL IsSpawnerEmpty()
+{
+	if (enemy_spawn_data_list->head == NULL)
+	{
+		return TRUE;
+	}
+	
+	return FALSE;
 }
