@@ -4,7 +4,7 @@
 
 #include "TypeDefines.h"
 #include "Vector2.h"
-#include "CircleCollider.h"
+#include "Collision.h"
 #include "EnemySpawner.h"
 
 typedef struct UnionList List;

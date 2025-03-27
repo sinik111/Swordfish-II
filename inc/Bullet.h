@@ -3,8 +3,8 @@
 #include <wchar.h>
 
 #include "Vector2.h"
-#include "CircleCollider.h"
 #include "TypeDefines.h"
+#include "Collision.h"
 
 typedef struct Player Player;
 typedef struct Enemy Enemy;

@@ -1,9 +1,20 @@
 #pragma once
 
+#include "TypeDefines.h"
+#include "Vector2.h"
+
 typedef struct UnionList List;
 typedef struct Enemy Enemy;
 typedef struct Player Player;
 typedef struct Boss Boss;
+
+typedef struct CircleCollider
+{
+	Vector2 position;
+	float radius;
+} CircleCollider;
+
+BOOL IsCollide(const CircleCollider* a, const CircleCollider* b);
 
 void CheckBulletsToBossCollision(List* bullet_list, Boss* enemy);
 

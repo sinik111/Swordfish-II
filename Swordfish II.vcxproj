@@ -135,10 +135,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Background.c" />
     <ClCompile Include="src\Boss.c" />
     <ClCompile Include="src\Bullet.c" />
     <ClCompile Include="src\Effect.c" />
-    <ClCompile Include="src\CircleCollider.c" />
     <ClCompile Include="src\Collision.c" />
     <ClCompile Include="src\ConsoleRenderer.c" />
     <ClCompile Include="src\DebugUtility.c" />
@@ -161,9 +161,9 @@
     <ClCompile Include="src\Vector2.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inc\Background.h" />
     <ClInclude Include="inc\Boss.h" />
     <ClInclude Include="inc\Bullet.h" />
-    <ClInclude Include="inc\CircleCollider.h" />
     <ClInclude Include="inc\Collision.h" />
     <ClInclude Include="inc\ConsoleRenderer.h" />
     <ClInclude Include="inc\DebugUtility.h" />

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Vector2.h"
-#include "CircleCollider.h"
+#include "Collision.h"
 #include "TypeDefines.h"
 #include "Shape.h"
 

@@ -42,9 +42,6 @@
     <ClCompile Include="src\Main.c">
       <Filter>소스 파일\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\CircleCollider.c">
-      <Filter>소스 파일\Utility</Filter>
-    </ClCompile>
     <ClCompile Include="src\Collision.c">
       <Filter>소스 파일\Core</Filter>
     </ClCompile>
@@ -111,6 +108,9 @@
     <ClCompile Include="src\Boss.c">
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
+    <ClCompile Include="src\Background.c">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Collision.h">
@@ -136,9 +136,6 @@
     </ClInclude>
     <ClInclude Include="inc\MenuScene.h">
       <Filter>헤더 파일\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\CircleCollider.h">
-      <Filter>헤더 파일\Utility</Filter>
     </ClInclude>
     <ClInclude Include="inc\DebugUtility.h">
       <Filter>헤더 파일\Utility</Filter>
@@ -183,6 +180,9 @@
       <Filter>헤더 파일\Core</Filter>
     </ClInclude>
     <ClInclude Include="inc\Boss.h">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Background.h">
       <Filter>헤더 파일\Object</Filter>
     </ClInclude>
   </ItemGroup>

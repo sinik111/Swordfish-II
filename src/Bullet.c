@@ -23,7 +23,7 @@ void CreateCanonBullet(Bullet* bullet, Player* player)
 	vec2 adjustment = { 3.0f, 0.0f };
 	bullet->position = AddVector2(&player->position, &adjustment);
 	bullet->direction = RightVector;
-	bullet->collider = CreateCircleCollider(&bullet->position, 0.5f);
+	bullet->collider.radius = 0.5f;
 	bullet->speed = 50.0f;
 	bullet->timer = 2.0f;
 	bullet->damage = 3;
@@ -39,7 +39,7 @@ void CreateBullet(Bullet* bullet, Player* player)
 	bullet->id = GenerateID();
 	bullet->position = AddVector2(&player->position, &RightVector);
 	bullet->direction = RightVector;
-	bullet->collider = CreateCircleCollider(&bullet->position, 0.5f);
+	bullet->collider.radius = 0.5f;
 	bullet->speed = 100.0f;
 	bullet->timer = 2.0f;
 	bullet->damage = 1;
@@ -54,8 +54,7 @@ void CreateEnemyBullet(Bullet* bullet, const Vector2* position)
 {
 	bullet->id = GenerateID();
 	bullet->position = AddVector2(position, &LeftVector);
-	//bullet->direction = LeftVector;
-	bullet->collider = CreateCircleCollider(&bullet->position, 0.5f);
+	bullet->collider.radius = 0.5f;
 	bullet->speed = 20.0f;
 	bullet->timer = 10.0f;
 	bullet->damage = 1;
