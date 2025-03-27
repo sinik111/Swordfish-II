@@ -12,13 +12,13 @@
 #include "TypeDefines.h"
 #include "ConsoleRenderer.h"
 
-static EffectData* bullet_hit_effect_data = NULL;
-static EffectData* player_flame_effect_data = NULL;
-static EffectData* canon_flame_effect_data = NULL;
-static EffectData* enemy_destroy_effect_data = NULL;
+static EffectData* effect_data[EFFECT_MAX] = { 0 };
 
 static void CreateEffectData(const wchar_t* file_name, EffectType type);
 static void ReleaseEffectDataList(EffectData* data);
+
+static WORD RandomAllColor();
+static WORD RandomRedYellow();
 
 void InitializeEffectData()
 {
@@ -26,6 +26,7 @@ void InitializeEffectData()
 	CreateEffectData(L"player_flame.txt", PLAYER_FLAME_EFFECT);
 	CreateEffectData(L"canon_flame.txt", CANON_FLAME_EFFECT);
 	CreateEffectData(L"effect_enemy_destroy.txt", ENEMY_DESTROY_EFFECT);
+	CreateEffectData(L"boss_destroy.txt", BOSS_DESTROY_EFFECT);
 }
 
 static void CreateEffectData(const wchar_t* file_name, EffectType type)
@@ -42,27 +43,7 @@ static void CreateEffectData(const wchar_t* file_name, EffectType type)
 		return;
 	}
 
-	switch (type)
-	{
-	case BULLET_HIT_EFFECT:
-		bullet_hit_effect_data = data;
-		break;
-
-	case PLAYER_FLAME_EFFECT:
-		player_flame_effect_data = data;
-		break;
-
-	case CANON_FLAME_EFFECT:
-		canon_flame_effect_data = data;
-		break;
-
-	case ENEMY_DESTROY_EFFECT:
-		enemy_destroy_effect_data = data;
-		break;
-
-	default:
-		return;
-	}
+	effect_data[type] = data;
 
 	List* effect_frame_list = CreateList(LIST);
 	effect_frame_list->id = GenerateID();
@@ -109,31 +90,10 @@ void CreateEffect(Effect* effect, const Vector2* position, EffectType type)
 
 void UpdateEffect(Effect* effect)
 {
-	EffectData* effect_data = NULL;
-	switch (effect->type)
-	{
-	case BULLET_HIT_EFFECT:
-		effect_data = bullet_hit_effect_data;
-		break;
-
-	case PLAYER_FLAME_EFFECT:
-		effect_data = player_flame_effect_data;
-		break;
-
-	case CANON_FLAME_EFFECT:
-		effect_data = canon_flame_effect_data;
-		break;
-
-	case ENEMY_DESTROY_EFFECT:
-		effect_data = enemy_destroy_effect_data;
-		break;
-
-	default:
-		return;
-	}
+	EffectData* data = effect_data[effect->type];
 
 	effect->timer += DeltaTime();
-	if (effect->timer >= effect_data->duration)
+	if (effect->timer >= data->duration)
 	{
 		effect->is_destroyed = TRUE;
 	}
@@ -141,31 +101,11 @@ void UpdateEffect(Effect* effect)
 
 void RenderEffect(Effect* effect)
 {
-	EffectData* effect_data = NULL;
-	switch (effect->type)
-	{
-	case BULLET_HIT_EFFECT:
-		effect_data = bullet_hit_effect_data;
-		break;
+	EffectData* data = effect_data[effect->type];
 
-	case PLAYER_FLAME_EFFECT:
-		effect_data = player_flame_effect_data;
-		break;
-	case CANON_FLAME_EFFECT:
-		effect_data = canon_flame_effect_data;
-		break;
+	int frame = (int)(effect->timer / data->duration * data->frames);
 
-	case ENEMY_DESTROY_EFFECT:
-		effect_data = enemy_destroy_effect_data;
-		break;
-
-	default:
-		return;
-	}
-
-	int frame = (int)(effect->timer / effect_data->duration * effect_data->frames);
-
-	List* frame_list = effect_data->effect_frame_list;
+	List* frame_list = data->effect_frame_list;
 
 	Node* current_frame_list = frame_list->head;
 	while (frame--)
@@ -179,23 +119,21 @@ void RenderEffect(Effect* effect)
 		wchar_t shape = current_shape_node->data.draw_unit.shape;
 		WORD attribute = current_shape_node->data.draw_unit.attribute;
 		Vector2 position = AddVector2(&effect->position, &current_shape_node->data.draw_unit.position);
-		if (attribute == 99)
-		{
-			attribute = rand() % 15 + 1;
-		}
-		else if (attribute == 98)
-		{
-			int random = rand() % 2;
 
-			if (random)
-			{
-				attribute = FG_RED;
-			}
-			else
-			{
-				attribute = FG_YELLOW;
-			}
+		switch (attribute)
+		{
+		case 99:
+			attribute = RandomAllColor();
+			break;
+
+		case 98:
+			attribute = RandomRedYellow();
+			break;
+
+		default:
+			break;
 		}
+
 		ScreenDrawChar((int)position.x, (int)position.y, shape, attribute);
 
 		current_shape_node = current_shape_node->next;
@@ -209,14 +147,11 @@ BOOL IsEffectDestroyed(Effect* effect)
 
 void ReleaseEffectData()
 {
-	ReleaseEffectDataList(bullet_hit_effect_data);
-	bullet_hit_effect_data = NULL;
-	ReleaseEffectDataList(player_flame_effect_data);
-	player_flame_effect_data = NULL;
-	ReleaseEffectDataList(canon_flame_effect_data);
-	canon_flame_effect_data = NULL;
-	ReleaseEffectDataList(enemy_destroy_effect_data);
-	enemy_destroy_effect_data = NULL;
+	for (int i = 0; i < EFFECT_MAX; ++i)
+	{
+		ReleaseEffectDataList(effect_data[i]);
+		effect_data[i] = NULL;
+	}
 }
 
 static void ReleaseEffectDataList(EffectData* data)
@@ -235,4 +170,14 @@ static void ReleaseEffectDataList(EffectData* data)
 
 		free(data);
 	}
+}
+
+static WORD RandomAllColor()
+{
+	return rand() % 15 + 1;
+}
+
+static WORD RandomRedYellow()
+{
+	return rand() % 2 == 0 ? FG_RED : FG_YELLOW;
 }

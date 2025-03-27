@@ -15,6 +15,7 @@
 #include "Effect.h"
 #include "MyTime.h"
 #include "Game.h"
+#include "Boss.h"
 
 static Player* player = NULL;
 static List* bullet_list = NULL;
@@ -22,6 +23,7 @@ static List* enemy_list = NULL;
 static List* enemy_bullet_list = NULL;
 static UIplayerHP* hp_ui = NULL;
 static List* effect_list = NULL;
+static Boss* boss = NULL;
 
 static void UpdateBulletList();
 static void UpdateEnemyList();
@@ -50,6 +52,8 @@ void InitializePlayScene()
 
 	InitializeEnemySpawnData();
 
+	boss = CreateBoss();
+
 	UpdateTime();
 }
 
@@ -59,18 +63,28 @@ void UpdatePlayScene()
 	if (IsSpawnerEmpty() && IsEnemyAllDestroyed())
 	{
 		// boss 생성코드
-		ChangeScene(END);
+		//ChangeScene(END);
 	}
 
 	// collision
 	CheckBulletsToEnemiesCollision(bullet_list, enemy_list);
 	CheckPlayerToEnemyBulletsCollision(player, enemy_bullet_list);
 
+	if (boss)
+	{
+		CheckBulletsToBossCollision(bullet_list, boss);
+	}
+
 	// object
 	UpdatePlayer(player);
 	UpdateBulletList();
 	UpdateEnemyBulletList();
 	UpdateEnemyList();
+
+	if (boss)
+	{
+		UpdateBoss(boss);
+	}
 
 	UpdateEnemySpawner();
 
@@ -90,6 +104,7 @@ void RenderPlayScene()
 	RenderBulletList();
 	RenderEnemyBulletList();
 	RenderEnemyList();
+	RenderBoss(boss);
 
 	// effect
 	RenderEffectList();
@@ -158,6 +173,9 @@ void ReleasePlayScene()
 	ReleaseEffectData();
 	ReleaseShapeData();
 	ReleaseEnemySpawnData();
+
+	free(boss);
+	boss = NULL;
 }
 
 List* GetEffectList()

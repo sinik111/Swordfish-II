@@ -6,18 +6,19 @@
 #include "DebugUtility.h"
 #include "Bullet.h"
 #include "Player.h"
+#include "Boss.h"
 
-void CheckBulletsToEnemyCollision(List* bullet_list, Enemy* enemy)
+void CheckBulletsToBossCollision(List* bullet_list, Boss* boss)
 {
 	Node* previous_bullet_node = NULL;
 	Node* current_bullet_node = bullet_list->head;
 	while (current_bullet_node != NULL)
 	{
-		if (IsCollide(&current_bullet_node->data.bullet.collider, &enemy->collider))
+		if (IsCollide(&current_bullet_node->data.bullet.collider, &boss->collider))
 		{
-			DebugLog("hit\n");
-			
+			PlayBulletHitEffect(&current_bullet_node->data.bullet);
 			DestroyBullet(&current_bullet_node->data.bullet);
+			BossTakeDamage(boss, current_bullet_node->data.bullet.damage);
 		}
 
 		previous_bullet_node = current_bullet_node;

@@ -37,7 +37,7 @@ Player* CreatePlayer()
 	player->hp = 30;
 	player->fire_rate = 0.2f;
 	player->is_destroyed = FALSE;
-	player->collider.radius = 2.0f;
+	player->collider.radius = 0.5f;
 	player->canon_fire_rate = 0.5f;
 	player->gear_state = GEAR_CANON;
 	player->machine_gun_timer = 0.0f;

@@ -8,7 +8,12 @@
 typedef enum ShapeType
 {
 	PLAYER_SHAPE,
-	ENEMY_1_SHAPE
+	ENEMY_1_SHAPE,
+	BOSS_1_SHAPE,
+	BOSS_2_SHAPE,
+	//BOSS_3_SHAPE,
+	//BOSS_4_SHAPE,
+	SHAPE_MAX
 } ShapeType;
 
 typedef struct UnionList List;

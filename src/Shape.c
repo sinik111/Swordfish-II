@@ -9,17 +9,22 @@
 #include "Global.h"
 #include "ConsoleRenderer.h"
 #include "TypeDefines.h"
+#include "DebugUtility.h"
 
-static ShapeData* player_shape_data = NULL;
-static ShapeData* enemy_1_shape_data = NULL;
+static ShapeData* shape_data[SHAPE_MAX] = { 0 };
 
 static void CreateShapeData(const wchar_t* file_name, ShapeType type);
-static void ReleaseShapeDataList(ShapeData* shape_Data);
+static void ReleaseShapeDataList(ShapeData* shape_data);
 
 void InitializeShapeData()
 {
 	CreateShapeData(L"player_shape.txt", PLAYER_SHAPE);
 	CreateShapeData(L"enemy_1_shape.txt", ENEMY_1_SHAPE);
+	CreateShapeData(L"boss_ship.txt", BOSS_1_SHAPE);
+	CreateShapeData(L"boss_ship_gun.txt", BOSS_2_SHAPE);
+	//CreateShapeData(L"layer_engine.txt", BOSS_2_SHAPE);
+	//CreateShapeData(L"layer_front.txt", BOSS_3_SHAPE);
+	//CreateShapeData(L"layer_side.txt", BOSS_4_SHAPE);
 }
 
 static void CreateShapeData(const wchar_t* file_name, ShapeType type)
@@ -36,19 +41,7 @@ static void CreateShapeData(const wchar_t* file_name, ShapeType type)
 		return;
 	}
 
-	switch (type)
-	{
-	case PLAYER_SHAPE:
-		player_shape_data = data;
-		break;
-
-	case ENEMY_1_SHAPE:
-		enemy_1_shape_data = data;
-		break;
-
-	default:
-		return;
-	}
+	shape_data[type] = data;
 
 	List* shape_frame_list = CreateList(LIST);
 	shape_frame_list->id = GenerateID();
@@ -86,22 +79,9 @@ static void CreateShapeData(const wchar_t* file_name, ShapeType type)
 
 void RenderShape(const Vector2* position, ShapeType type, int frame)
 {
-	ShapeData* shape_data = NULL;
-	switch (type)
-	{
-	case PLAYER_SHAPE:
-		shape_data = player_shape_data;
-		break;
+	ShapeData* data = shape_data[type];
 
-	case ENEMY_1_SHAPE:
-		shape_data = enemy_1_shape_data;
-		break;
-
-	default:
-		return;
-	}
-
-	List* frame_list = shape_data->shape_frame_list;
+	List* frame_list = data->shape_frame_list;
 
 	Node* current_frame_list = frame_list->head;
 	while (frame--)
@@ -109,31 +89,84 @@ void RenderShape(const Vector2* position, ShapeType type, int frame)
 		current_frame_list = current_frame_list->next;
 	}
 
+	wchar_t buffer[120] = { 0 };
+	int indexer = 0;
+	Vector2 previous_position = { -1.0f, 0.0f };
+	Vector2 first_position;
 	Node* current_shape_node = current_frame_list->data.effect_list->head;
-	while (current_shape_node != NULL)
+	while (1)
 	{
 		wchar_t shape = current_shape_node->data.draw_unit.shape;
 		WORD attribute = current_shape_node->data.draw_unit.attribute;
 		Vector2 shape_position = AddVector2(position, &current_shape_node->data.draw_unit.position);
-		ScreenDrawChar((int)shape_position.x, (int)shape_position.y, shape, attribute);
+
+		if ((int)shape_position.x >= 0 && (int)shape_position.y >= 0 &&
+			(int)shape_position.x < ScreenWidth() && (int)shape_position.y < ScreenHeight())
+		{
+			if ((int)previous_position.x == -1)
+			{
+				buffer[indexer++] = shape;
+				first_position.x = shape_position.x;
+				first_position.y = shape_position.y;
+				previous_position.x = shape_position.x;
+				previous_position.y = shape_position.y;
+			}
+			else if ((int)shape_position.x == (int)previous_position.x + 1 && (int)shape_position.y == (int)previous_position.y)
+			{
+				buffer[indexer++] = shape;
+				previous_position.x = shape_position.x;
+				previous_position.y = shape_position.y;
+			}
+			else
+			{
+				buffer[indexer] = L'\0';
+				indexer = 0;
+				ScreenDrawString((int)first_position.x, (int)first_position.y, buffer, attribute);
+
+				buffer[indexer++] = shape;
+				first_position.x = shape_position.x;
+				first_position.y = shape_position.y;
+				previous_position.x = shape_position.x;
+				previous_position.y = shape_position.y;
+			}
+		}
+		else if (indexer)
+		{
+			buffer[indexer] = L'\0';
+			indexer = 0;
+			previous_position.x = -1.0f;
+			ScreenDrawString((int)first_position.x, (int)first_position.y, buffer, attribute);
+		}
 
 		current_shape_node = current_shape_node->next;
+
+		if (current_shape_node == NULL)
+		{
+			if (indexer)
+			{
+				buffer[indexer] = L'\0';
+				ScreenDrawString((int)first_position.x, (int)first_position.y, buffer, attribute);
+			}
+
+			break;
+		}
 	}
 }
 
 void ReleaseShapeData()
 {
-	ReleaseShapeDataList(player_shape_data);
-	player_shape_data = NULL;
-	ReleaseShapeDataList(enemy_1_shape_data);
-	enemy_1_shape_data = NULL;
+	for (int i = 0; i < SHAPE_MAX; ++i)
+	{
+		ReleaseShapeDataList(shape_data[i]);
+		shape_data[i] = NULL;
+	}
 }
 
-static void ReleaseShapeDataList(ShapeData* shape_Data)
+static void ReleaseShapeDataList(ShapeData* shape_data)
 {
-	if (shape_Data != NULL)
+	if (shape_data != NULL)
 	{
-		Node* current_node = shape_Data->shape_frame_list->head;
+		Node* current_node = shape_data->shape_frame_list->head;
 		while (current_node != NULL)
 		{
 			DeleteList(current_node->data.shape_list);
@@ -141,8 +174,8 @@ static void ReleaseShapeDataList(ShapeData* shape_Data)
 			current_node = current_node->next;
 		}
 
-		DeleteList(shape_Data->shape_frame_list);
+		DeleteList(shape_data->shape_frame_list);
 
-		free(shape_Data);
+		free(shape_data);
 	}
 }

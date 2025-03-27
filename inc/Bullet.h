@@ -37,7 +37,7 @@ void CreateCanonBullet(Bullet* bullet, Player* player);
 
 void CreateBullet(Bullet* bullet, Player* player);
 
-void CreateEnemyBullet(Bullet* bullet, Enemy* enemy);
+void CreateEnemyBullet(Bullet* bullet, const Vector2* position);
 
 void UpdateBullet(Bullet* bullet);
 

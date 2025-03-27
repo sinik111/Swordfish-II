@@ -73,7 +73,7 @@ void UpdateEnemy(Enemy* enemy)
 	if (enemy->fire_timer >= 1.0f)
 	{
 		Bullet bullet;
-		CreateEnemyBullet(&bullet, enemy);
+		CreateEnemyBullet(&bullet, &enemy->position);
 		//bullet.direction = LeftVector;
 		vec2 player_position = GetPlayer()->position;
 		bullet.direction = MakeDirectionVector2(&player_position, &bullet.position);

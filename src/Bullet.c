@@ -1,4 +1,4 @@
-#include "Bullet.h"
+ï»¿#include "Bullet.h"
 
 #include <stdlib.h>
 #include <wchar.h>
@@ -23,7 +23,7 @@ void CreateCanonBullet(Bullet* bullet, Player* player)
 	vec2 adjustment = { 3.0f, 0.0f };
 	bullet->position = AddVector2(&player->position, &adjustment);
 	bullet->direction = RightVector;
-	bullet->collider = CreateCircleCollider(&bullet->position, 1.0f);
+	bullet->collider = CreateCircleCollider(&bullet->position, 0.5f);
 	bullet->speed = 50.0f;
 	bullet->timer = 2.0f;
 	bullet->damage = 3;
@@ -31,7 +31,7 @@ void CreateCanonBullet(Bullet* bullet, Player* player)
 	bullet->has_flame = TRUE;
 	bullet->back_flame_timer = 0.0f;
 	bullet->type = PLAYER_CANON;
-	wmemcpy_s(bullet->shape, 2, L"¡Ü", 2);
+	wmemcpy_s(bullet->shape, 2, L"â¬¤", 2);
 }
 
 void CreateBullet(Bullet* bullet, Player* player)
@@ -39,7 +39,7 @@ void CreateBullet(Bullet* bullet, Player* player)
 	bullet->id = GenerateID();
 	bullet->position = AddVector2(&player->position, &RightVector);
 	bullet->direction = RightVector;
-	bullet->collider = CreateCircleCollider(&bullet->position, 1.0f);
+	bullet->collider = CreateCircleCollider(&bullet->position, 0.5f);
 	bullet->speed = 100.0f;
 	bullet->timer = 2.0f;
 	bullet->damage = 1;
@@ -50,24 +50,24 @@ void CreateBullet(Bullet* bullet, Player* player)
 	wmemcpy_s(bullet->shape, 2, L"-", 2);
 }
 
-void CreateEnemyBullet(Bullet* bullet, Enemy* enemy)
+void CreateEnemyBullet(Bullet* bullet, const Vector2* position)
 {
 	bullet->id = GenerateID();
-	bullet->position = AddVector2(&enemy->position, &LeftVector);
+	bullet->position = AddVector2(position, &LeftVector);
 	//bullet->direction = LeftVector;
-	bullet->collider = CreateCircleCollider(&bullet->position, 1.0f);
+	bullet->collider = CreateCircleCollider(&bullet->position, 0.5f);
 	bullet->speed = 20.0f;
 	bullet->timer = 10.0f;
 	bullet->damage = 1;
 	bullet->is_destroyed = FALSE;
-	wmemcpy_s(bullet->shape, 2, L"¡Ü", 2);
+	wmemcpy_s(bullet->shape, 2, L"â—", 2);
 }
 
 void UpdateBullet(Bullet* bullet)
 {
 	vec2 transition = ScalarMulVector2Each(&bullet->direction, bullet->speed * 2 * DeltaTime(), bullet->speed * DeltaTime());
 	bullet->position = AddVector2(&bullet->position, &transition);
-	bullet->timer -= DeltaTime(); // ÀÚµ¿ »èÁ¦ µÇµµ·Ï Å¸ÀÌ¸Ó ½Ã°£ °¨¼Ò.
+	bullet->timer -= DeltaTime(); // ìžë™ ì‚­ì œ ë˜ë„ë¡ íƒ€ì´ë¨¸ ì‹œê°„ ê°ì†Œ.
 
 	switch (bullet->type)
 	{
