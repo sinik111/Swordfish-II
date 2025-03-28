@@ -34,10 +34,11 @@ void CreateCanonBullet(Bullet* bullet, Player* player)
 	wmemcpy_s(bullet->shape, 2, L"⬤", 2);
 }
 
-void CreateBullet(Bullet* bullet, Player* player)
+void CreateBulletUpper(Bullet* bullet, Player* player)
 {
 	bullet->id = GenerateID();
-	bullet->position = AddVector2(&player->position, &RightVector);
+	vec2 adjustment = { 1.0f, -2.0f };
+	bullet->position = AddVector2(&player->position, &adjustment);
 	bullet->direction = RightVector;
 	bullet->collider.radius = 0.5f;
 	bullet->speed = 100.0f;
@@ -46,7 +47,24 @@ void CreateBullet(Bullet* bullet, Player* player)
 	bullet->is_destroyed = FALSE;
 	bullet->has_flame = TRUE;
 	bullet->back_flame_timer = 0.0f;
-	bullet->type = PLAYER_CANON;
+	bullet->type = PLAYER_MACHINE_GUN;
+	wmemcpy_s(bullet->shape, 2, L"-", 2);
+}
+
+void CreateBulletLower(Bullet* bullet, Player* player)
+{
+	bullet->id = GenerateID();
+	vec2 adjustment = { 1.0f, 2.0f };
+	bullet->position = AddVector2(&player->position, &adjustment);
+	bullet->direction = RightVector;
+	bullet->collider.radius = 0.5f;
+	bullet->speed = 100.0f;
+	bullet->timer = 2.0f;
+	bullet->damage = 1;
+	bullet->is_destroyed = FALSE;
+	bullet->has_flame = TRUE;
+	bullet->back_flame_timer = 0.0f;
+	bullet->type = PLAYER_MACHINE_GUN;
 	wmemcpy_s(bullet->shape, 2, L"-", 2);
 }
 
@@ -109,7 +127,17 @@ void PlayBulletHitEffect(Bullet* bullet)
 {
 	Effect effect;
 
-	CreateEffect(&effect, &bullet->position, BULLET_HIT_EFFECT);
+	switch (bullet->type)
+	{
+	case PLAYER_CANON:
+		CreateEffect(&effect, &bullet->position, effect_canon_hit);
+		break;
+
+	case PLAYER_MACHINE_GUN:
+		CreateEffect(&effect, &bullet->position, effect_canon_hit);
+		break;
+	}
+
 	Insert(GetEffectList(), &effect, sizeof(Effect));
 }
 
@@ -120,7 +148,7 @@ static void BulletBackFlame(Bullet* bullet)
 	{
 		Effect effect;
 
-		CreateEffect(&effect, &bullet->position, CANON_FLAME_EFFECT);
+		CreateEffect(&effect, &bullet->position, effect_canon_flame);
 
 		Insert(GetEffectList(), &effect, sizeof(Effect));
 

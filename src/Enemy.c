@@ -86,7 +86,7 @@ void UpdateEnemy(Enemy* enemy)
 
 void RenderEnemy(Enemy* enemy)
 {
-	RenderShape(&enemy->position, ENEMY_1_SHAPE, 0);
+	RenderShape(&enemy->position, shape_enemy_1, 0);
 	//ScreenDrawString((int)enemy->position.x, (int)enemy->position.y, enemy->shape, FG_YELLOW);
 }
 
@@ -106,7 +106,7 @@ void DestroyEnemy(Enemy* enemy)
 	enemy->is_destroyed = TRUE;
 
 	Effect effect;
-	CreateEffect(&effect, &enemy->position, ENEMY_DESTROY_EFFECT);
+	CreateEffect(&effect, &enemy->position, effect_enemy_destroy);
 
 	Insert(GetEffectList(), &effect, sizeof(Effect));
 }

@@ -14,7 +14,7 @@
 
 static EffectData* effect_data[EFFECT_MAX] = { 0 };
 
-static void CreateEffectData(const wchar_t* file_name, EffectType type);
+static void CreateEffectData(const wchar_t* file_name, EffectName name);
 static void ReleaseEffectDataList(EffectData* data);
 
 static WORD RandomAllColor();
@@ -22,14 +22,15 @@ static WORD RandomRedYellow();
 
 void InitializeEffectData()
 {
-	CreateEffectData(L"effect_bullet_hit.txt", BULLET_HIT_EFFECT);
-	CreateEffectData(L"player_flame.txt", PLAYER_FLAME_EFFECT);
-	CreateEffectData(L"canon_flame.txt", CANON_FLAME_EFFECT);
-	CreateEffectData(L"effect_enemy_destroy.txt", ENEMY_DESTROY_EFFECT);
-	CreateEffectData(L"boss_destroy.txt", BOSS_DESTROY_EFFECT);
+	CreateEffectData(L"effect_canon_hit.txt", effect_canon_hit);
+	//CreateEffectData(L"effect_machingun_hit.txt", MACHINEGUN_HIT_EFFECT);
+	CreateEffectData(L"effect_player_flame.txt", effect_player_flame);
+	CreateEffectData(L"effect_canon_flame.txt", effect_canon_flame);
+	CreateEffectData(L"effect_enemy_destroy.txt", effect_enemy_destroy);
+	CreateEffectData(L"effect_boss_destroy.txt", effect_boss_destroy);
 }
 
-static void CreateEffectData(const wchar_t* file_name, EffectType type)
+static void CreateEffectData(const wchar_t* file_name, EffectName name)
 {
 	StringData* sd = LoadSingleLineData(file_name);
 	if (sd == NULL)
@@ -43,7 +44,7 @@ static void CreateEffectData(const wchar_t* file_name, EffectType type)
 		return;
 	}
 
-	effect_data[type] = data;
+	effect_data[name] = data;
 
 	List* effect_frame_list = CreateList(LIST);
 	effect_frame_list->id = GenerateID();
@@ -79,18 +80,18 @@ static void CreateEffectData(const wchar_t* file_name, EffectType type)
 	free(sd);
 }
 
-void CreateEffect(Effect* effect, const Vector2* position, EffectType type)
+void CreateEffect(Effect* effect, const Vector2* position, EffectName name)
 {
 	effect->id = GenerateID();
 	effect->timer = 0.0f;
 	effect->is_destroyed = FALSE;
 	effect->position = *position;
-	effect->type = type;
+	effect->name = name;
 }
 
 void UpdateEffect(Effect* effect)
 {
-	EffectData* data = effect_data[effect->type];
+	EffectData* data = effect_data[effect->name];
 
 	effect->timer += DeltaTime();
 	if (effect->timer >= data->duration)
@@ -101,7 +102,7 @@ void UpdateEffect(Effect* effect)
 
 void RenderEffect(Effect* effect)
 {
-	EffectData* data = effect_data[effect->type];
+	EffectData* data = effect_data[effect->name];
 
 	int frame = (int)(effect->timer / data->duration * data->frames);
 

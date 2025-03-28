@@ -11,14 +11,8 @@
 BOOL IsCollide(const CircleCollider* a, const CircleCollider* b)
 {
 	vec2 sub_vec = SubVector2(&a->position, &b->position);
-	float distance = GetVecter2Length(&sub_vec);
 
-	if (a->radius + b->radius >= distance)
-	{
-		return TRUE;
-	}
-
-	return FALSE;
+	return a->radius * a->radius + b->radius * b->radius >= GetVecter2Square(&sub_vec);
 }
 
 void CheckBulletsToBossCollision(List* bullet_list, Boss* boss)
@@ -81,5 +75,22 @@ void CheckPlayerToEnemyBulletsCollision(Player* player, List* enemy_bullet_list)
 
 		previous_bullet_node = current_bullet_node;
 		current_bullet_node = current_bullet_node->next;
+	}
+}
+
+void CheckPlayerToItemsCollision(Player* player, List* item_list)
+{
+	Node* previous_item_node = NULL;
+	Node* current_item_node = item_list->head;
+	while (current_item_node != NULL)
+	{
+		if (IsCollide(&player->collider, &current_item_node->data.item.collider))
+		{
+			DestroyItem(&current_item_node->data.item);
+			PlayerGetItem(player);
+		}
+
+		previous_item_node = current_item_node;
+		current_item_node = current_item_node->next;
 	}
 }

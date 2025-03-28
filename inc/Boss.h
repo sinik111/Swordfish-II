@@ -52,7 +52,7 @@ typedef struct Boss
 	int empty_position;
 	BOOL is_destroyed;
 	BOOL is_started;
-	ShapeType shape_type[4];
+	ShapeName shape_type[4];
 } Boss;
 
 Boss* CreateBoss();

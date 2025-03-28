@@ -12,7 +12,8 @@ typedef struct UnionList List;
 
 typedef enum BulletType
 {
-	PLAYER_CANON
+	PLAYER_CANON,
+	PLAYER_MACHINE_GUN
 } BulletType;
 
 typedef struct Bullet
@@ -35,7 +36,9 @@ typedef struct Bullet
 
 void CreateCanonBullet(Bullet* bullet, Player* player);
 
-void CreateBullet(Bullet* bullet, Player* player);
+void CreateBulletUpper(Bullet* bullet, Player* player);
+
+void CreateBulletLower(Bullet* bullet, Player* player);
 
 void CreateEnemyBullet(Bullet* bullet, const Vector2* position);
 

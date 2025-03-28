@@ -21,26 +21,38 @@ UIplayerHP* CreateUIplayerHP()
 
 	ui->id = GenerateID();
 	ui->position = ZeroVector;
-	wmemset(ui->ui_shape, 0, 40);
-	//▋
+	wmemset(ui->ui_hp_shape, 0, 30);
+	wmemset(ui->ui_shield_shape, 0, 20);
 
 	return ui;
 }
 
 void UpdateUIplayerHP(UIplayerHP* ui)
 {
-	wmemset(ui->ui_shape, 0, 40);
+	wmemset(ui->ui_hp_shape, 0, 30);
+	wmemset(ui->ui_shield_shape, 0, 20);
 
-	wmemcpy_s(ui->ui_shape, 3, L"HP ", 3);
+	ui->index = 0;
+	wmemcpy_s(ui->ui_hp_shape, 3, L"HP ", 3);
+	ui->index = 3;
 	
 	Player* player = GetPlayer();
 	for (int i = 0; i < player->hp; ++i)
 	{
-		ui->ui_shape[i + 3] = L'▋';
+		ui->ui_hp_shape[ui->index++] = L'▋';
 	}
+	ui->ui_hp_shape[ui->index] = L'\0';
+
+	int shield_index = 0;
+	while (shield_index < player->shield)
+	{
+		ui->ui_shield_shape[shield_index++] = L'▋';
+	}
+	ui->ui_shield_shape[shield_index] = L'\0';
 }
 
 void RenderUIplayerHP(UIplayerHP* ui)
 {
-	ScreenDrawString((int)ui->position.x, (int)ui->position.y, ui->ui_shape, FG_WHITE);
+	ScreenDrawString((int)ui->position.x, (int)ui->position.y, ui->ui_hp_shape, FG_WHITE);
+	ScreenDrawString((int)ui->position.x + ui->index, (int)ui->position.y, ui->ui_shield_shape, FG_SKY);
 }

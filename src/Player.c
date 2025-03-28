@@ -35,7 +35,9 @@ Player* CreatePlayer()
 	player->position = pos;
 	player->speed = 30.0f;
 	player->hp = 30;
-	player->fire_rate = 0.2f;
+	player->shield = 0;
+	player->shield_max = 10;
+	player->fire_rate = 0.1f;
 	player->is_destroyed = FALSE;
 	player->collider.radius = 0.5f;
 	player->canon_fire_rate = 0.5f;
@@ -71,17 +73,21 @@ void RenderPlayer(Player* player)
 {
 	if (IsKeyDown(VK_UP))
 	{
-		RenderShape(&player->position, PLAYER_SHAPE, 0);
+		RenderShape(&player->position, shape_player, 0);
 	}
 	else if (IsKeyDown(VK_DOWN))
 	{
-		RenderShape(&player->position, PLAYER_SHAPE, 0);
+		RenderShape(&player->position, shape_player, 0);
 	}
 	else
 	{
-		RenderShape(&player->position, PLAYER_SHAPE, 1);
+		RenderShape(&player->position, shape_player, 1);
 	}
-	
+
+	if (player->shield > 0)
+	{
+		RenderShape(&player->position, shape_player_shield, 0);
+	}
 }
 
 void DeletePlayer(Player** player)
@@ -96,9 +102,54 @@ void DeletePlayer(Player** player)
 
 void PlayerTakeDamage(Player* player, int damage)
 {
-	player->hp -= damage;
+	if (player->shield > 0)
+	{
+		player->shield -= damage;
+		if (player->shield <= 0)
+		{
+			player->hp -= player->shield;
+			player->shield = 0;
 
-	//DebugLog("Player HP: %d\n", player->hp);
+			PlayerRemoveGear(player, GEAR_SHEILD);
+
+			player->collider.radius = 0.5f;
+		}
+	}
+	else
+	{
+		player->hp -= damage;
+
+		if (player->gear_state & GEAR_MACHINE_GUN)
+		{
+			PlayerRemoveGear(player, GEAR_MACHINE_GUN);
+		}
+	}
+	
+}
+
+void PlayerGetItem(Player* player)
+{
+	if (!(player->gear_state & GEAR_MACHINE_GUN))
+	{
+		player->gear_state |= GEAR_MACHINE_GUN;
+	}
+	else
+	{
+		player->gear_state |= GEAR_SHEILD;
+
+		player->shield += 10;
+		if (player->shield > player->shield_max)
+		{
+			player->shield = player->shield_max;
+		}
+
+		player->collider.radius = 5.0f;
+	}
+}
+
+void PlayerRemoveGear(Player* player, PlayerGear gear)
+{
+	player->gear_state ^= gear;
 }
 
 void DestroyPlayer(Player* player)
@@ -149,15 +200,10 @@ static void WeaponUpdate(Player* player)
 		FireCanon(player);
 	}
 	
-	//if (player->gear_state & GEAR_MACHINE_GUN)
-	//{
-	//	FireMachineGun(player);
-	//}
-	//
-	//if (player->gear_state & GEAR_MACHINE_GUN)
-	//{
-	//	FireMachineGun(player);
-	//}
+	if (player->gear_state & GEAR_MACHINE_GUN)
+	{
+		FireMachineGun(player);
+	}
 }
 
 static void FireCanon(Player* player)
@@ -182,16 +228,19 @@ static void FireCanon(Player* player)
 static void FireMachineGun(Player* player)
 {
 	player->machine_gun_timer += DeltaTime();
-	if (player->fire_rate < player->machine_gun_timer)
+	if (IsKeyDown('A'))
 	{
-		player->machine_gun_timer -= player->fire_rate;
-		Bullet bullet;
-		//CreateCanonBullet(&bullet, player);
-		CreateBullet(&bullet, player);
+		if (player->fire_rate < player->machine_gun_timer)
+		{
+			player->machine_gun_timer = 0.0f;
+			Bullet bullet;
 
-		Insert(GetPlayerBulletList(), &bullet, sizeof(Bullet));
+			CreateBulletUpper(&bullet, player);
+			Insert(GetPlayerBulletList(), &bullet, sizeof(Bullet));
 
-		//DebugLog("fire\n");
+			CreateBulletLower(&bullet, player);
+			Insert(GetPlayerBulletList(), &bullet, sizeof(Bullet));
+		}
 	}
 }
 
@@ -228,7 +277,7 @@ static void BackFlame(Player* player)
 		vec2 back = { -4.0f, 0.0f };
 		vec2 position = AddVector2(&player->position, &back);
 
-		CreateEffect(&effect, &position, PLAYER_FLAME_EFFECT);
+		CreateEffect(&effect, &position, effect_player_flame);
 
 		Insert(GetEffectList(), &effect, sizeof(Effect));
 

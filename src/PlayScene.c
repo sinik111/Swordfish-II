@@ -15,6 +15,7 @@
 #include "MyTime.h"
 #include "Game.h"
 #include "Boss.h"
+#include "Item.h"
 
 static Player* player = NULL;
 static List* bullet_list = NULL;
@@ -23,16 +24,22 @@ static List* enemy_bullet_list = NULL;
 static UIplayerHP* hp_ui = NULL;
 static List* effect_list = NULL;
 static Boss* boss = NULL;
+static List* item_list = NULL;
+
+static float item_timer = 0.0f;
+static float item_rate = 3.0f;
 
 static void UpdateBulletList();
 static void UpdateEnemyList();
 static void UpdateEnemyBulletList();
 static void UpdateEffectList();
+static void UpdateItemList();
 
 static void RenderBulletList();
 static void RenderEnemyList();
 static void RenderEnemyBulletList();
 static void RenderEffectList();
+static void RenderItemList();
 
 void InitializePlayScene()
 {
@@ -53,6 +60,8 @@ void InitializePlayScene()
 
 	boss = CreateBoss();
 
+	item_list = CreateList(ITEM);
+
 	UpdateTime();
 }
 
@@ -68,6 +77,7 @@ void UpdatePlayScene()
 	// collision
 	CheckBulletsToEnemiesCollision(bullet_list, enemy_list);
 	CheckPlayerToEnemyBulletsCollision(player, enemy_bullet_list);
+	CheckPlayerToItemsCollision(player, item_list);
 
 	if (boss)
 	{
@@ -86,6 +96,7 @@ void UpdatePlayScene()
 	}
 
 	UpdateEnemySpawner();
+	UpdateItemList();
 
 	// effect
 	UpdateEffectList();
@@ -104,6 +115,7 @@ void RenderPlayScene()
 	RenderEnemyBulletList();
 	RenderEnemyList();
 	RenderBoss(boss);
+	RenderItemList();
 
 	// effect
 	RenderEffectList();
@@ -175,6 +187,9 @@ void ReleasePlayScene()
 
 	free(boss);
 	boss = NULL;
+
+	DeleteList(item_list);
+	item_list = NULL;
 }
 
 List* GetEffectList()
@@ -289,6 +304,36 @@ static void UpdateEffectList()
 	}
 }
 
+static void UpdateItemList()
+{
+	item_timer += DeltaTime();
+	if (item_timer >= item_rate)
+	{
+		item_timer -= item_rate;
+
+		Item item;
+		CreateItem(&item);
+
+		Insert(item_list, &item, sizeof(Item));
+	}
+
+	Node* previous_node = NULL;
+	Node* current_node = item_list->head;
+	while (current_node != NULL)
+	{
+		UpdateItem(&current_node->data.item);
+		if (IsItemDestroyed(&current_node->data.item))
+		{
+			current_node = RemoveNode(item_list, previous_node, current_node);
+		}
+		else
+		{
+			previous_node = current_node;
+			current_node = current_node->next;
+		}
+	}
+}
+
 static void RenderBulletList()
 {
 	Node* current_node = bullet_list->head;
@@ -328,6 +373,18 @@ static void RenderEffectList()
 	while (current_node != NULL)
 	{
 		RenderEffect(&current_node->data.effect);
+
+		current_node = current_node->next;
+	}
+}
+
+static void RenderItemList()
+{
+	Node* previous_node = NULL;
+	Node* current_node = item_list->head;
+	while (current_node != NULL)
+	{
+		RenderItem(&current_node->data.item);
 
 		current_node = current_node->next;
 	}

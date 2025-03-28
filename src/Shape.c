@@ -13,21 +13,23 @@
 
 static ShapeData* shape_data[SHAPE_MAX] = { 0 };
 
-static void CreateShapeData(const wchar_t* file_name, ShapeType type);
+static void CreateShapeData(const wchar_t* file_name, ShapeName name);
 static void ReleaseShapeDataList(ShapeData* shape_data);
 
 void InitializeShapeData()
 {
-	CreateShapeData(L"player_shape.txt", PLAYER_SHAPE);
-	CreateShapeData(L"enemy_1_shape.txt", ENEMY_1_SHAPE);
-	CreateShapeData(L"boss_ship.txt", BOSS_1_SHAPE);
-	CreateShapeData(L"boss_ship_gun.txt", BOSS_2_SHAPE);
-	//CreateShapeData(L"layer_engine.txt", BOSS_2_SHAPE);
-	//CreateShapeData(L"layer_front.txt", BOSS_3_SHAPE);
-	//CreateShapeData(L"layer_side.txt", BOSS_4_SHAPE);
+	CreateShapeData(L"shape_player.txt", shape_player);
+	CreateShapeData(L"shape_enemy_1.txt", shape_enemy_1);
+	CreateShapeData(L"shape_boss_ship.txt", shape_boss_ship);
+	CreateShapeData(L"shape_boss_gun.txt", shape_boss_gun);
+	CreateShapeData(L"shape_item_center.txt", shape_item_center);
+	CreateShapeData(L"shape_item_pink.txt", shape_item_pink);
+	CreateShapeData(L"shape_item_yellow.txt", shape_item_yellow);
+	CreateShapeData(L"shape_item_sky.txt", shape_item_sky);
+	CreateShapeData(L"shape_player_shield.txt", shape_player_shield);
 }
 
-static void CreateShapeData(const wchar_t* file_name, ShapeType type)
+static void CreateShapeData(const wchar_t* file_name, ShapeName name)
 {
 	StringData* sd = LoadSingleLineData(file_name);
 	if (sd == NULL)
@@ -41,7 +43,7 @@ static void CreateShapeData(const wchar_t* file_name, ShapeType type)
 		return;
 	}
 
-	shape_data[type] = data;
+	shape_data[name] = data;
 
 	List* shape_frame_list = CreateList(LIST);
 	shape_frame_list->id = GenerateID();
@@ -77,9 +79,9 @@ static void CreateShapeData(const wchar_t* file_name, ShapeType type)
 	free(sd);
 }
 
-void RenderShape(const Vector2* position, ShapeType type, int frame)
+void RenderShape(const Vector2* position, ShapeName name, int frame)
 {
-	ShapeData* data = shape_data[type];
+	ShapeData* data = shape_data[name];
 
 	List* frame_list = data->shape_frame_list;
 

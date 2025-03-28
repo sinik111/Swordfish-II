@@ -21,6 +21,17 @@ float GetVecter2Length(const Vector2* v_in) // 벡터의 크기(길이)를 반환함
 	return 0.0f;
 }
 
+float GetVecter2Square(const Vector2* v_in)
+{
+	if (v_in != NULL)
+	{
+		// 피타고라스의 정리 이용
+		return v_in->x * v_in->x + v_in->y * v_in->y;
+	}
+
+	return 0.0f;
+}
+
 void NormalizeVector2(Vector2* v_out) // 벡터의 크기(길이)를 1으로 만듦
 {
 	if (v_out != NULL)

@@ -150,6 +150,7 @@
     <ClCompile Include="src\Game.c" />
     <ClCompile Include="src\Global.c" />
     <ClCompile Include="src\Input.c" />
+    <ClCompile Include="src\Item.c" />
     <ClCompile Include="src\Main.c" />
     <ClCompile Include="src\MenuScene.c" />
     <ClCompile Include="src\MyTime.c" />
@@ -176,6 +177,7 @@
     <ClInclude Include="inc\Game.h" />
     <ClInclude Include="inc\Global.h" />
     <ClInclude Include="inc\Input.h" />
+    <ClInclude Include="inc\Item.h" />
     <ClInclude Include="inc\MenuScene.h" />
     <ClInclude Include="inc\MyTime.h" />
     <ClInclude Include="inc\PlayScene.h" />
@@ -185,6 +187,22 @@
     <ClInclude Include="inc\UIPlayerHP.h" />
     <ClInclude Include="inc\UnionList.h" />
     <ClInclude Include="inc\Vector2.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="data\effect_boss_destroy.txt" />
+    <Text Include="data\shape_boss_ship.txt" />
+    <Text Include="data\shape_boss_gun.txt" />
+    <Text Include="data\effect_canon_flame.txt" />
+    <Text Include="data\effect_canon_hit.txt" />
+    <Text Include="data\effect_enemy_destroy.txt" />
+    <Text Include="data\shape_enemy_1.txt" />
+    <Text Include="data\shape_item_center.txt" />
+    <Text Include="data\shape_item_pink.txt" />
+    <Text Include="data\shape_item_sky.txt" />
+    <Text Include="data\shape_item_yellow.txt" />
+    <Text Include="data\effect_player_flame.txt" />
+    <Text Include="data\shape_player.txt" />
+    <Text Include="data\shape_player_shield.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

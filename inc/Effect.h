@@ -5,15 +5,16 @@
 #include "Vector2.h"
 #include "TypeDefines.h"
 
-typedef enum EffectType
+typedef enum EffectName
 {
-	BULLET_HIT_EFFECT,
-	PLAYER_FLAME_EFFECT,
-	CANON_FLAME_EFFECT,
-	ENEMY_DESTROY_EFFECT,
-	BOSS_DESTROY_EFFECT,
+	effect_canon_hit,
+	//MACHINEGUN_HIT_EFFECT,
+	effect_player_flame,
+	effect_canon_flame,
+	effect_enemy_destroy,
+	effect_boss_destroy,
 	EFFECT_MAX
-} EffectType;
+} EffectName;
 
 typedef struct UnionList List;
 
@@ -31,12 +32,12 @@ typedef struct Effect
 	Vector2 position;
 	float timer;
 	BOOL is_destroyed;
-	EffectType type;
+	EffectName name;
 } Effect;
 
 void InitializeEffectData();
 
-void CreateEffect(Effect* effect, const Vector2* position, EffectType type);
+void CreateEffect(Effect* effect, const Vector2* position, EffectName name);
 
 void UpdateEffect(Effect* effect);
 

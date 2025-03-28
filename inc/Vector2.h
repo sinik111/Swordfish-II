@@ -21,6 +21,8 @@ extern const Vector2 ZeroVector; // { 0.0f, 0.0f }
 
 float GetVecter2Length(const Vector2* v_in); // 벡터의 크기(길이)를 반환함
 
+float GetVecter2Square(const Vector2* v_in);
+
 void NormalizeVector2(Vector2* v_out); // 벡터의 크기(길이)를 1으로 만듦
 
 Vector2 GetNormalizedVector2(const Vector2* v_in); // 벡터의 크기(길이)를 1으로 만듦(리턴형)

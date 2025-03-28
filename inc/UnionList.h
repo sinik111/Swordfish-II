@@ -7,6 +7,7 @@
 #include "DrawUnit.h"
 #include "Effect.h"
 #include "EnemySpawner.h"
+#include "Item.h"
 
 typedef enum DataType
 {
@@ -16,7 +17,8 @@ typedef enum DataType
 	LIST,
 	DRAW_UNIT,
 	EFFECT,
-	ENEMY_SPAWN_DATA
+	ENEMY_SPAWN_DATA,
+	ITEM
 } DataType;
 
 // 리스트에 여러가지 타입들을 담을 수 있게 union을 이용함.
@@ -35,6 +37,7 @@ typedef struct UnionNode
 		DrawUnit draw_unit;
 		Effect effect;
 		EnemySpawnData spawn_data;
+		Item item;
 	} data;
 	struct UnionNode* next;
 } Node;

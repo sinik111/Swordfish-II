@@ -92,7 +92,7 @@ void UpdateBoss(Boss* boss)
 			// 104 ~ 119 , 10 ~ 20
 			Vector2 effect_position = { (float)(rand() % 30 + 90), (float)(rand() % 30) };
 
-			CreateEffect(&effect, &effect_position, BOSS_DESTROY_EFFECT);
+			CreateEffect(&effect, &effect_position, effect_boss_destroy);
 			Insert(GetEffectList(), &effect, sizeof(Effect));
 
 			boss->boss_timer = 0.0f;
@@ -168,8 +168,8 @@ void UpdateBoss(Boss* boss)
 
 void RenderBoss(Boss* boss)
 {
-	RenderShape(&boss->position, BOSS_1_SHAPE, 0);
-	RenderShape(&boss->position, BOSS_2_SHAPE, 0);
+	RenderShape(&boss->position, shape_boss_ship, 0);
+	RenderShape(&boss->position, shape_boss_gun, 0);
 }
 
 void BossTakeDamage(Boss* boss, int damage)

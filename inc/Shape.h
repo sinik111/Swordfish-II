@@ -5,16 +5,19 @@
 #include "Vector2.h"
 #include "TypeDefines.h"
 
-typedef enum ShapeType
+typedef enum ShapeName
 {
-	PLAYER_SHAPE,
-	ENEMY_1_SHAPE,
-	BOSS_1_SHAPE,
-	BOSS_2_SHAPE,
-	//BOSS_3_SHAPE,
-	//BOSS_4_SHAPE,
+	shape_player,
+	shape_enemy_1,
+	shape_boss_ship,
+	shape_boss_gun,
+	shape_item_center,
+	shape_item_pink,
+	shape_item_yellow,
+	shape_item_sky,
+	shape_player_shield,
 	SHAPE_MAX
-} ShapeType;
+} ShapeName;
 
 typedef struct UnionList List;
 
@@ -28,6 +31,6 @@ typedef struct ShapeData
 
 void InitializeShapeData();
 
-void RenderShape(const Vector2* position, ShapeType type, int frame);
+void RenderShape(const Vector2* position, ShapeName name, int frame);
 
 void ReleaseShapeData();

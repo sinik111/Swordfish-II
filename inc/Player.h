@@ -27,9 +27,10 @@ typedef struct Player
 	float fire_rate;
 	float canon_fire_rate;
 	int hp;
+	int shield;
+	int shield_max;
 	BOOL is_destroyed;
 	int gear_state;
-	ShapeType shape_type;
 	float machine_gun_timer;
 	float canon_timer;
 	float flame_timer;
@@ -44,5 +45,9 @@ void RenderPlayer(Player* player);
 void DeletePlayer(Player** player);
 
 void PlayerTakeDamage(Player* player, int damage);
+
+void PlayerGetItem(Player* player);
+
+void PlayerRemoveGear(Player* player, PlayerGear gear);
 
 void DestroyPlayer(Player* player);
