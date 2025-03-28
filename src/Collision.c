@@ -8,7 +8,9 @@
 #include "Player.h"
 #include "Boss.h"
 
-BOOL IsCollide(const CircleCollider* a, const CircleCollider* b)
+static BOOL IsCollide(const CircleCollider* a, const CircleCollider* b);
+
+static BOOL IsCollide(const CircleCollider* a, const CircleCollider* b)
 {
 	vec2 sub_vec = SubVector2(&a->position, &b->position);
 

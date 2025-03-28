@@ -16,15 +16,19 @@
 #include "Game.h"
 #include "Boss.h"
 #include "Item.h"
+#include "UIPlayerSkill.h"
+#include "Beam.h"
 
 static Player* player = NULL;
 static List* bullet_list = NULL;
 static List* enemy_list = NULL;
 static List* enemy_bullet_list = NULL;
-static UIplayerHP* hp_ui = NULL;
+static UIPlayerHP* hp_ui = NULL;
 static List* effect_list = NULL;
 static Boss* boss = NULL;
 static List* item_list = NULL;
+static UIPlayerSkill* skill_ui = NULL;
+static Beam* beam = NULL;
 
 static float item_timer = 0.0f;
 static float item_rate = 3.0f;
@@ -50,7 +54,7 @@ void InitializePlayScene()
 	enemy_bullet_list = CreateList(BULLET);
 	enemy_list = CreateList(ENEMY);
 
-	hp_ui = CreateUIplayerHP();
+	hp_ui = CreateUIPlayerHP();
 
 	InitializeEffectData();
 
@@ -61,6 +65,8 @@ void InitializePlayScene()
 	boss = CreateBoss();
 
 	item_list = CreateList(ITEM);
+
+	skill_ui = CreateUIPlayerSkill();
 
 	UpdateTime();
 }
@@ -98,11 +104,17 @@ void UpdatePlayScene()
 	UpdateEnemySpawner();
 	UpdateItemList();
 
+	if (beam != NULL)
+	{
+		UpdateBeam(beam);
+	}
+
 	// effect
 	UpdateEffectList();
 
 	// ui
-	UpdateUIplayerHP(hp_ui);
+	UpdateUIPlayerHP(hp_ui);
+	UpdateUIPlayerSKill(skill_ui);
 }
 
 void RenderPlayScene()
@@ -116,12 +128,17 @@ void RenderPlayScene()
 	RenderEnemyList();
 	RenderBoss(boss);
 	RenderItemList();
+	if (beam != NULL)
+	{
+		RenderBeam(beam);
+	}
 
 	// effect
 	RenderEffectList();
 
 	// ui
-	RenderUIplayerHP(hp_ui);
+	RenderUIPlayerHP(hp_ui);
+	RenderUIPlayerSKill(skill_ui);
 
 	ScreenDrawString(ScreenWidth() / 2 - 8, ScreenHeight() / 2 + 5, L"press A to fire", FG_WHITE);
 	ScreenDrawString(ScreenWidth() / 2 - 12, ScreenHeight() / 2 + 9, L"press space to countinue", FG_PINK);
@@ -185,11 +202,23 @@ void ReleasePlayScene()
 	ReleaseShapeData();
 	ReleaseEnemySpawnData();
 
-	free(boss);
-	boss = NULL;
+	if (boss != NULL)
+	{
+		free(boss);
+		boss = NULL;
+	}
 
 	DeleteList(item_list);
 	item_list = NULL;
+
+	free(skill_ui);
+	skill_ui = NULL;
+
+	if (beam != NULL)
+	{
+		free(beam);
+		beam = NULL;
+	}
 }
 
 List* GetEffectList()
@@ -215,6 +244,16 @@ List* GetEnemyBulletList()
 Player* GetPlayer()
 {
 	return player;
+}
+
+Boss* GetBoss()
+{
+	return boss;
+}
+
+void SetBeam(Beam* new_beam)
+{
+	beam = new_beam;
 }
 
 BOOL IsEnemyAllDestroyed()

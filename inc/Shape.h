@@ -16,6 +16,8 @@ typedef enum ShapeName
 	shape_item_yellow,
 	shape_item_sky,
 	shape_player_shield,
+	shape_beam_center,
+	shape_beam_side,
 	SHAPE_MAX
 } ShapeName;
 

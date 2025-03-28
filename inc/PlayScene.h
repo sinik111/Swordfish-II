@@ -4,6 +4,8 @@
 
 typedef struct UnionList List;
 typedef struct Player Player;
+typedef struct Boss Boss;
+typedef struct Beam Beam;
 
 void InitializePlayScene();
 
@@ -22,5 +24,9 @@ List* GetEnemyList();
 List* GetEnemyBulletList();
 
 Player* GetPlayer();
+
+Boss* GetBoss();
+
+void SetBeam(Beam* new_beam);
 
 BOOL IsEnemyAllDestroyed();

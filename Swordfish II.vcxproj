@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -136,6 +136,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Background.c" />
+    <ClCompile Include="src\Beam.c" />
     <ClCompile Include="src\Boss.c" />
     <ClCompile Include="src\Bullet.c" />
     <ClCompile Include="src\Effect.c" />
@@ -158,11 +159,13 @@
     <ClCompile Include="src\Shape.c" />
     <ClCompile Include="src\UIPlayerHP.c" />
     <ClCompile Include="src\Player.c" />
+    <ClCompile Include="src\UIPlayerSkill.c" />
     <ClCompile Include="src\UnionList.c" />
     <ClCompile Include="src\Vector2.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Background.h" />
+    <ClInclude Include="inc\Beam.h" />
     <ClInclude Include="inc\Boss.h" />
     <ClInclude Include="inc\Bullet.h" />
     <ClInclude Include="inc\Collision.h" />
@@ -185,11 +188,13 @@
     <ClInclude Include="inc\Shape.h" />
     <ClInclude Include="inc\TypeDefines.h" />
     <ClInclude Include="inc\UIPlayerHP.h" />
+    <ClInclude Include="inc\UIPlayerSkill.h" />
     <ClInclude Include="inc\UnionList.h" />
     <ClInclude Include="inc\Vector2.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\effect_boss_destroy.txt" />
+    <Text Include="data\enemy_spawn_data.txt" />
     <Text Include="data\shape_boss_ship.txt" />
     <Text Include="data\shape_boss_gun.txt" />
     <Text Include="data\effect_canon_flame.txt" />

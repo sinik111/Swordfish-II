@@ -14,6 +14,8 @@
 #include "TypeDefines.h"
 #include "Game.h"
 #include "PlayScene.h"
+#include "Boss.h"
+#include "Beam.h"
 
 static void Translate(Player* player);
 static void WeaponUpdate(Player* player);
@@ -21,6 +23,9 @@ static void FireCanon(Player* player);
 static void FireMachineGun(Player* player);
 static void ScreenBoundCheck(Player* player);
 static void BackFlame(Player* player);
+static void ChargeSkill(Player* player);
+static void FireSkill(Player* player);
+static void GiveDamageToAll(Player* player);
 
 Player* CreatePlayer()
 {
@@ -34,7 +39,7 @@ Player* CreatePlayer()
 	vec2 pos = { 0.0f, (float)ScreenHeight() / 2 };
 	player->position = pos;
 	player->speed = 30.0f;
-	player->hp = 30;
+	player->hp = 20;
 	player->shield = 0;
 	player->shield_max = 10;
 	player->fire_rate = 0.1f;
@@ -45,6 +50,16 @@ Player* CreatePlayer()
 	player->machine_gun_timer = 0.0f;
 	player->canon_timer = 0.0f;
 	player->flame_timer = 0.0f;
+	player->skill_gauge = 0;
+	player->skill_gauge_max = 10;
+	player->charge_timer = 0.0f;
+	player->is_locked = FALSE;
+	player->lock_timer = 0.0f;
+	player->lock_duration = 1.0f;
+	player->is_skill_fired = FALSE;
+	player->skill_delay_timer = 0.0f;
+	player->skill_delay_duration = 0.6f;
+	player->skill_damage = 20;
 	
 	return player;
 }
@@ -60,13 +75,20 @@ void UpdatePlayer(Player* player)
 		return;
 	}
 
-	Translate(player);
+	if (!player->is_locked)
+	{
+		Translate(player);
 
-	WeaponUpdate(player);
+		WeaponUpdate(player);
+	}
 
 	BackFlame(player);
 
 	ScreenBoundCheck(player);
+
+	ChargeSkill(player);
+
+	FireSkill(player);
 }
 
 void RenderPlayer(Player* player)
@@ -84,9 +106,10 @@ void RenderPlayer(Player* player)
 		RenderShape(&player->position, shape_player, 1);
 	}
 
-	if (player->shield > 0)
+	if (player->gear_state & GEAR_SHEILD)
 	{
-		RenderShape(&player->position, shape_player_shield, 0);
+		vec2 adjusted = AddVector2(&player->position, &LeftVector);
+		RenderShape(&adjusted, shape_player_shield, 0);
 	}
 }
 
@@ -102,7 +125,7 @@ void DeletePlayer(Player** player)
 
 void PlayerTakeDamage(Player* player, int damage)
 {
-	if (player->shield > 0)
+	if (player->gear_state & GEAR_SHEILD)
 	{
 		player->shield -= damage;
 		if (player->shield <= 0)
@@ -151,6 +174,8 @@ void PlayerRemoveGear(Player* player, PlayerGear gear)
 {
 	player->gear_state ^= gear;
 }
+
+
 
 void DestroyPlayer(Player* player)
 {
@@ -244,6 +269,46 @@ static void FireMachineGun(Player* player)
 	}
 }
 
+static void FireSkill(Player* player)
+{
+	if (IsKeyReleased('S'))
+	{
+		if (player->skill_gauge == player->skill_gauge_max)
+		{
+			player->charge_timer = 0.0f;
+			player->skill_gauge = 0;
+
+			player->is_locked = TRUE;
+
+			player->is_skill_fired = FALSE;
+		}
+	}
+
+	if (player->is_locked)
+	{
+		player->lock_timer += DeltaTime();
+		if (player->lock_timer >= player->lock_duration)
+		{
+			player->is_locked = FALSE;
+			player->lock_timer = 0.0f;
+		}
+
+		if (!player->is_skill_fired)
+		{
+			player->skill_delay_timer += DeltaTime();
+			if (player->skill_delay_timer >= player->skill_delay_duration)
+			{
+				player->is_skill_fired = TRUE;
+				player->skill_delay_timer = 0.0f;
+				GiveDamageToAll(player);
+
+				Beam* beam = CreateBeam(player);
+				SetBeam(beam);
+			}
+		}
+	}
+}
+
 static void ScreenBoundCheck(Player* player)
 {
 	if (player->position.x < 2)
@@ -256,9 +321,9 @@ static void ScreenBoundCheck(Player* player)
 		player->position.y = 2;
 	}
 
-	if (player->position.x > ScreenWidth() - 3)
+	if (player->position.x > ScreenWidth() / 2 + 10)
 	{
-		player->position.x = (float)(ScreenWidth() - 3);
+		player->position.x = (float)(ScreenWidth() / 2 + 10);
 	}
 
 	if (player->position.y > ScreenHeight() - 3)
@@ -282,5 +347,47 @@ static void BackFlame(Player* player)
 		Insert(GetEffectList(), &effect, sizeof(Effect));
 
 		player->flame_timer -= 0.05f;
+	}
+}
+
+static void ChargeSkill(Player* player)
+{
+	if (player->charge_timer < player->skill_gauge_max)
+	{
+		player->charge_timer += DeltaTime();
+	}
+	
+	if (player->charge_timer >= player->skill_gauge_max)
+	{
+		player->charge_timer = (float)player->skill_gauge_max;
+	}
+	
+	player->skill_gauge = (int)player->charge_timer;
+}
+
+static void GiveDamageToAll(Player* player)
+{
+	Boss* boss = GetBoss();
+	if (boss != NULL)
+	{
+		BossTakeDamage(boss, player->skill_damage);
+	}
+
+	List* enemy_list = GetEnemyList();
+	if (enemy_list != NULL)
+	{
+		Node* current_node = enemy_list->head;
+		while (current_node != NULL)
+		{
+			EnemyTakeDamage(&current_node->data.enemy, player->skill_damage);
+
+			current_node = current_node->next;
+		}
+	}
+
+	List* bullet_list = GetEnemyBulletList();
+	if (bullet_list != NULL)
+	{
+		ClearList(bullet_list);
 	}
 }

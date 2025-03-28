@@ -29,11 +29,21 @@ typedef struct Player
 	int hp;
 	int shield;
 	int shield_max;
+	int skill_gauge;
+	int skill_gauge_max;
 	BOOL is_destroyed;
 	int gear_state;
 	float machine_gun_timer;
 	float canon_timer;
 	float flame_timer;
+	float charge_timer;
+	BOOL is_locked;
+	float lock_timer;
+	float lock_duration;
+	BOOL is_skill_fired;
+	float skill_delay_timer;
+	float skill_delay_duration;
+	int skill_damage;
 } Player;
 
 Player* CreatePlayer();

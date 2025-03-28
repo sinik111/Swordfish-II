@@ -37,6 +37,15 @@
     <Filter Include="소스 파일\Utility">
       <UniqueIdentifier>{d21bd632-23ad-494c-a085-4f183af0734a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="리소스 파일\Effect">
+      <UniqueIdentifier>{8e5d6b83-bf66-4429-b13f-74e0d4789f50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="리소스 파일\Shape">
+      <UniqueIdentifier>{6fb46a39-da99-4472-a586-0d3d144af1c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="리소스 파일\Game">
+      <UniqueIdentifier>{b619c1d5-b6b6-4be1-b2a0-637828400e2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.c">
@@ -109,6 +118,15 @@
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
     <ClCompile Include="src\Background.c">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Item.c">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UIPlayerSkill.c">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Beam.c">
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
   </ItemGroup>
@@ -185,5 +203,61 @@
     <ClInclude Include="inc\Background.h">
       <Filter>헤더 파일\Object</Filter>
     </ClInclude>
+    <ClInclude Include="inc\Item.h">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\UIPlayerSkill.h">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Beam.h">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="data\effect_boss_destroy.txt">
+      <Filter>리소스 파일\Effect</Filter>
+    </Text>
+    <Text Include="data\effect_canon_flame.txt">
+      <Filter>리소스 파일\Effect</Filter>
+    </Text>
+    <Text Include="data\effect_canon_hit.txt">
+      <Filter>리소스 파일\Effect</Filter>
+    </Text>
+    <Text Include="data\effect_enemy_destroy.txt">
+      <Filter>리소스 파일\Effect</Filter>
+    </Text>
+    <Text Include="data\effect_player_flame.txt">
+      <Filter>리소스 파일\Effect</Filter>
+    </Text>
+    <Text Include="data\enemy_spawn_data.txt">
+      <Filter>리소스 파일\Game</Filter>
+    </Text>
+    <Text Include="data\shape_boss_gun.txt">
+      <Filter>리소스 파일\Shape</Filter>
+    </Text>
+    <Text Include="data\shape_boss_ship.txt">
+      <Filter>리소스 파일\Shape</Filter>
+    </Text>
+    <Text Include="data\shape_enemy_1.txt">
+      <Filter>리소스 파일\Shape</Filter>
+    </Text>
+    <Text Include="data\shape_item_center.txt">
+      <Filter>리소스 파일\Shape</Filter>
+    </Text>
+    <Text Include="data\shape_item_pink.txt">
+      <Filter>리소스 파일\Shape</Filter>
+    </Text>
+    <Text Include="data\shape_item_sky.txt">
+      <Filter>리소스 파일\Shape</Filter>
+    </Text>
+    <Text Include="data\shape_item_yellow.txt">
+      <Filter>리소스 파일\Shape</Filter>
+    </Text>
+    <Text Include="data\shape_player.txt">
+      <Filter>리소스 파일\Shape</Filter>
+    </Text>
+    <Text Include="data\shape_player_shield.txt">
+      <Filter>리소스 파일\Shape</Filter>
+    </Text>
   </ItemGroup>
 </Project>

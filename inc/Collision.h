@@ -14,8 +14,6 @@ typedef struct CircleCollider
 	float radius;
 } CircleCollider;
 
-BOOL IsCollide(const CircleCollider* a, const CircleCollider* b);
-
 void CheckBulletsToBossCollision(List* bullet_list, Boss* enemy);
 
 void CheckBulletsToEnemiesCollision(List* bullet_list, List* enemy_list);

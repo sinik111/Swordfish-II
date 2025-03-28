@@ -27,6 +27,8 @@ void InitializeShapeData()
 	CreateShapeData(L"shape_item_yellow.txt", shape_item_yellow);
 	CreateShapeData(L"shape_item_sky.txt", shape_item_sky);
 	CreateShapeData(L"shape_player_shield.txt", shape_player_shield);
+	CreateShapeData(L"shape_beam_center.txt", shape_beam_center);
+	CreateShapeData(L"shape_beam_side.txt", shape_beam_side);
 }
 
 static void CreateShapeData(const wchar_t* file_name, ShapeName name)

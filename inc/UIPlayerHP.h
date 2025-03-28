@@ -4,19 +4,17 @@
 
 #include "Vector2.h"
 
-typedef struct Player Player;
-
-typedef struct UIplayerHP
+typedef struct UIPlayerHP
 {
 	long long id;
 	Vector2 position;
 	int index;
 	wchar_t ui_hp_shape[30];
 	wchar_t ui_shield_shape[20];
-} UIplayerHP;
+} UIPlayerHP;
 
-UIplayerHP* CreateUIplayerHP();
+UIPlayerHP* CreateUIPlayerHP();
 
-void UpdateUIplayerHP(UIplayerHP* ui);
+void UpdateUIPlayerHP(UIPlayerHP* ui);
 
-void RenderUIplayerHP(UIplayerHP* ui);
+void RenderUIPlayerHP(UIPlayerHP* ui);

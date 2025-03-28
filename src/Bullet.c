@@ -41,7 +41,7 @@ void CreateBulletUpper(Bullet* bullet, Player* player)
 	bullet->position = AddVector2(&player->position, &adjustment);
 	bullet->direction = RightVector;
 	bullet->collider.radius = 0.5f;
-	bullet->speed = 100.0f;
+	bullet->speed = 80.0f;
 	bullet->timer = 2.0f;
 	bullet->damage = 1;
 	bullet->is_destroyed = FALSE;
@@ -58,7 +58,7 @@ void CreateBulletLower(Bullet* bullet, Player* player)
 	bullet->position = AddVector2(&player->position, &adjustment);
 	bullet->direction = RightVector;
 	bullet->collider.radius = 0.5f;
-	bullet->speed = 100.0f;
+	bullet->speed = 80.0f;
 	bullet->timer = 2.0f;
 	bullet->damage = 1;
 	bullet->is_destroyed = FALSE;
