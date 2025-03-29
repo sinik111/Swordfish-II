@@ -13,6 +13,7 @@ typedef enum EffectName
 	effect_canon_flame,
 	effect_enemy_destroy,
 	effect_boss_destroy,
+	effect_beam_energy,
 	EFFECT_MAX
 } EffectName;
 

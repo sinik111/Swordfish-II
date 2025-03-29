@@ -46,8 +46,6 @@ void UpdateEnemy(Enemy* enemy);
 
 void RenderEnemy(Enemy* enemy);
 
-void DeleteEnemy(Enemy* enemy);
-
 void EnemyTakeDamage(Enemy* enemy, int damage);
 
 void DestroyEnemy(Enemy* enemy);

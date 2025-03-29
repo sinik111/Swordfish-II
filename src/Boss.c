@@ -25,7 +25,7 @@ Boss* CreateBoss()
 	}
 
 	boss->id = GenerateID();
-	vec2 position = { (float)ScreenWidth() + 10, (float)ScreenHeight() / 2 };
+	vec2 position = { (float)ScreenWidth() + 30, (float)ScreenHeight() / 2 };
 	boss->position = position;
 	boss->collider.radius = 15.0f;
 	boss->speed = 10.0f;

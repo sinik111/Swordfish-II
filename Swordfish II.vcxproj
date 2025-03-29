@@ -195,6 +195,8 @@
   <ItemGroup>
     <Text Include="data\effect_boss_destroy.txt" />
     <Text Include="data\enemy_spawn_data.txt" />
+    <Text Include="data\shape_beam_center.txt" />
+    <Text Include="data\shape_beam_side.txt" />
     <Text Include="data\shape_boss_ship.txt" />
     <Text Include="data\shape_boss_gun.txt" />
     <Text Include="data\effect_canon_flame.txt" />

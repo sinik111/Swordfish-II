@@ -36,5 +36,6 @@ void UpdateBeam(Beam* beam)
 
 void RenderBeam(Beam* beam)
 {
-
+	RenderShape(&beam->position, shape_beam_center, (int)(beam->timer * 10));
+	RenderShape(&beam->position, shape_beam_side, (int)(beam->timer * 10));
 }

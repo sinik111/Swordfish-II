@@ -19,6 +19,7 @@ static void ReleaseEffectDataList(EffectData* data);
 
 static WORD RandomAllColor();
 static WORD RandomRedYellow();
+static WORD RandomWhiteBlue();
 
 void InitializeEffectData()
 {
@@ -28,6 +29,7 @@ void InitializeEffectData()
 	CreateEffectData(L"effect_canon_flame.txt", effect_canon_flame);
 	CreateEffectData(L"effect_enemy_destroy.txt", effect_enemy_destroy);
 	CreateEffectData(L"effect_boss_destroy.txt", effect_boss_destroy);
+	CreateEffectData(L"effect_beam_energy.txt", effect_beam_energy);
 }
 
 static void CreateEffectData(const wchar_t* file_name, EffectName name)
@@ -131,6 +133,9 @@ void RenderEffect(Effect* effect)
 			attribute = RandomRedYellow();
 			break;
 
+		case 97:
+			attribute = RandomWhiteBlue();
+
 		default:
 			break;
 		}
@@ -181,4 +186,9 @@ static WORD RandomAllColor()
 static WORD RandomRedYellow()
 {
 	return rand() % 2 == 0 ? FG_RED : FG_YELLOW;
+}
+
+static WORD RandomWhiteBlue()
+{
+	return rand() % 2 == 0 ? FG_WHITE : FG_BLUE;
 }

@@ -45,28 +45,24 @@ static void RenderEnemyBulletList();
 static void RenderEffectList();
 static void RenderItemList();
 
+static BOOL IsEnemyAllDestroyed();
+
 void InitializePlayScene()
 {
 	InitializeShapeData();
+	InitializeEffectData();
+	InitializeEnemySpawnData();
 
 	player = CreatePlayer();
+	hp_ui = CreateUIPlayerHP();
+	
+	skill_ui = CreateUIPlayerSkill();
+
 	bullet_list = CreateList(BULLET);
 	enemy_bullet_list = CreateList(BULLET);
 	enemy_list = CreateList(ENEMY);
-
-	hp_ui = CreateUIPlayerHP();
-
-	InitializeEffectData();
-
 	effect_list = CreateList(EFFECT);
-
-	InitializeEnemySpawnData();
-
-	boss = CreateBoss();
-
 	item_list = CreateList(ITEM);
-
-	skill_ui = CreateUIPlayerSkill();
 
 	UpdateTime();
 }
@@ -74,9 +70,10 @@ void InitializePlayScene()
 void UpdatePlayScene()
 {
 	// Boss Encounter
-	if (IsSpawnerEmpty() && IsEnemyAllDestroyed())
+	if (IsSpawnerEmpty() && IsEnemyAllDestroyed() && boss == NULL)
 	{
 		// boss 생성코드
+		boss = CreateBoss();
 		//ChangeScene(END);
 	}
 
@@ -96,7 +93,7 @@ void UpdatePlayScene()
 	UpdateEnemyBulletList();
 	UpdateEnemyList();
 
-	if (boss)
+	if (boss != NULL)
 	{
 		UpdateBoss(boss);
 	}
@@ -119,14 +116,15 @@ void UpdatePlayScene()
 
 void RenderPlayScene()
 {
-	ScreenDrawString(ScreenWidth() / 2 - 2, ScreenHeight() / 2 - 1, L"play", FG_RED);
-
 	// object
 	RenderPlayer(player);
 	RenderBulletList();
 	RenderEnemyBulletList();
 	RenderEnemyList();
-	RenderBoss(boss);
+	if (boss != NULL)
+	{
+		RenderBoss(boss);
+	}
 	RenderItemList();
 	if (beam != NULL)
 	{
@@ -139,86 +137,73 @@ void RenderPlayScene()
 	// ui
 	RenderUIPlayerHP(hp_ui);
 	RenderUIPlayerSKill(skill_ui);
-
-	ScreenDrawString(ScreenWidth() / 2 - 8, ScreenHeight() / 2 + 5, L"press A to fire", FG_WHITE);
-	ScreenDrawString(ScreenWidth() / 2 - 12, ScreenHeight() / 2 + 9, L"press space to countinue", FG_PINK);
 }
 
 void ReleasePlayScene()
 {
-	Node* current_node = NULL;
 	if (bullet_list != NULL)
 	{
-		current_node = bullet_list->head;
-		while (current_node != NULL)
-		{
-			current_node = current_node->next;
-		}
-
 		DeleteList(bullet_list);
-
 		bullet_list = NULL;
 	}
 
 	if (enemy_bullet_list != NULL)
 	{
-		current_node = enemy_bullet_list->head;
-		while (current_node != NULL)
-		{
-			current_node = current_node->next;
-		}
-
 		DeleteList(enemy_bullet_list);
-
 		enemy_bullet_list = NULL;
 	}
 
-	DeletePlayer(&player);
+	if (player != NULL)
+	{
+		free(player);
+		player = NULL;
+	}
 
 	if (enemy_list != NULL)
 	{
-		current_node = enemy_list->head;
-		while (current_node != NULL)
-		{
-			DeleteEnemy(&current_node->data.enemy);
-
-			current_node = current_node->next;
-		}
-
 		DeleteList(enemy_list);
-
 		enemy_list = NULL;
 	}
 
 	if (hp_ui != NULL)
 	{
 		free(hp_ui);
+		hp_ui = NULL;
 	}
 
-	DeleteList(effect_list);
-	effect_list = NULL;
-
-	ReleaseEffectData();
-	ReleaseShapeData();
-	ReleaseEnemySpawnData();
-
+	if (effect_list != NULL)
+	{
+		DeleteList(effect_list);
+		effect_list = NULL;
+	}
+	
 	if (boss != NULL)
 	{
 		free(boss);
 		boss = NULL;
 	}
 
-	DeleteList(item_list);
-	item_list = NULL;
-
-	free(skill_ui);
-	skill_ui = NULL;
-
+	if (item_list != NULL)
+	{
+		DeleteList(item_list);
+		item_list = NULL;
+	}
+	
+	if (skill_ui != NULL)
+	{
+		free(skill_ui);
+		skill_ui = NULL;
+	}
+	
 	if (beam != NULL)
 	{
 		free(beam);
 		beam = NULL;
 	}
+
+	ReleaseEffectData();
+	ReleaseShapeData();
+	ReleaseEnemySpawnData();
 }
 
 List* GetEffectList()
@@ -256,14 +241,9 @@ void SetBeam(Beam* new_beam)
 	beam = new_beam;
 }
 
-BOOL IsEnemyAllDestroyed()
+static BOOL IsEnemyAllDestroyed()
 {
-	if (enemy_list->head == NULL)
-	{
-		return TRUE;
-	}
-
-	return FALSE;
+	return enemy_list->head == NULL;
 }
 
 static void UpdateBulletList()
@@ -313,7 +293,6 @@ static void UpdateEnemyList()
 		UpdateEnemy(&current_node->data.enemy);
 		if (IsEnemyDestroyed(&current_node->data.enemy))
 		{
-			DeleteEnemy(&current_node->data.enemy);
 			current_node = RemoveNode(enemy_list, previous_node, current_node);
 		}
 		else

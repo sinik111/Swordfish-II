@@ -44,7 +44,7 @@ Player* CreatePlayer()
 	player->shield_max = 10;
 	player->fire_rate = 0.1f;
 	player->is_destroyed = FALSE;
-	player->collider.radius = 0.5f;
+	player->collider.radius = 1.0f;
 	player->canon_fire_rate = 0.5f;
 	player->gear_state = GEAR_CANON;
 	player->machine_gun_timer = 0.0f;
@@ -93,11 +93,7 @@ void UpdatePlayer(Player* player)
 
 void RenderPlayer(Player* player)
 {
-	if (IsKeyDown(VK_UP))
-	{
-		RenderShape(&player->position, shape_player, 0);
-	}
-	else if (IsKeyDown(VK_DOWN))
+	if ((IsKeyDown(VK_UP) || IsKeyDown(VK_DOWN)) && !player->is_locked)
 	{
 		RenderShape(&player->position, shape_player, 0);
 	}
@@ -113,16 +109,6 @@ void RenderPlayer(Player* player)
 	}
 }
 
-void DeletePlayer(Player** player)
-{
-	if (*player != NULL)
-	{
-		free(*player);
-
-		*player = NULL;
-	}
-}
-
 void PlayerTakeDamage(Player* player, int damage)
 {
 	if (player->gear_state & GEAR_SHEILD)
@@ -135,7 +121,7 @@ void PlayerTakeDamage(Player* player, int damage)
 
 			PlayerRemoveGear(player, GEAR_SHEILD);
 
-			player->collider.radius = 0.5f;
+			player->collider.radius = 1.0f;
 		}
 	}
 	else
@@ -166,7 +152,7 @@ void PlayerGetItem(Player* player)
 			player->shield = player->shield_max;
 		}
 
-		player->collider.radius = 5.0f;
+		player->collider.radius = 3.0f;
 	}
 }
 
@@ -281,6 +267,15 @@ static void FireSkill(Player* player)
 			player->is_locked = TRUE;
 
 			player->is_skill_fired = FALSE;
+
+			Effect effect;
+
+			vec2 adjust = { 3.0f, 0.0f };
+			vec2 position = AddVector2(&player->position, &adjust);
+
+			CreateEffect(&effect, &position, effect_beam_energy);
+
+			Insert(GetEffectList(), &effect, sizeof(Effect));
 		}
 	}
 
@@ -316,9 +311,9 @@ static void ScreenBoundCheck(Player* player)
 		player->position.x = 2;
 	}
 
-	if (player->position.y < 2)
+	if (player->position.y < 3)
 	{
-		player->position.y = 2;
+		player->position.y = 3;
 	}
 
 	if (player->position.x > ScreenWidth() / 2 + 10)

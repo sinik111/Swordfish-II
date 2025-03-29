@@ -28,5 +28,3 @@ Player* GetPlayer();
 Boss* GetBoss();
 
 void SetBeam(Beam* new_beam);
-
-BOOL IsEnemyAllDestroyed();

@@ -61,7 +61,7 @@ void UpdateUIPlayerSKill(UIPlayerSkill* ui)
 
 	if (player->skill_gauge_max == player->skill_gauge)
 	{
-		wmemcpy_s(ui->ui_notice_shape, 13, L"⬤⬤  FULL  ⬤⬤ ", 13);
+		wmemcpy_s(ui->ui_notice_shape, 13, L"⬤   FULL   ⬤ ", 13);
 	}
 	else
 	{

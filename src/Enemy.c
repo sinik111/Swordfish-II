@@ -90,11 +90,6 @@ void RenderEnemy(Enemy* enemy)
 	//ScreenDrawString((int)enemy->position.x, (int)enemy->position.y, enemy->shape, FG_YELLOW);
 }
 
-void DeleteEnemy(Enemy* enemy)
-{
-
-}
-
 void EnemyTakeDamage(Enemy* enemy, int damage)
 {
 	//DebugLog("Enemy %lld HP: %d\n", enemy->id, enemy->hp);

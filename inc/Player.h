@@ -52,8 +52,6 @@ void UpdatePlayer(Player* player);
 
 void RenderPlayer(Player* player);
 
-void DeletePlayer(Player** player);
-
 void PlayerTakeDamage(Player* player, int damage);
 
 void PlayerGetItem(Player* player);
