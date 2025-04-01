@@ -16,6 +16,7 @@
 #include "PlayScene.h"
 #include "Boss.h"
 #include "Beam.h"
+#include "SoundController.h"
 
 static void Translate(Player* player);
 static void WeaponUpdate(Player* player);
@@ -26,6 +27,8 @@ static void BackFlame(Player* player);
 static void ChargeSkill(Player* player);
 static void FireSkill(Player* player);
 static void GiveDamageToAll(Player* player);
+
+static BOOL is_firing = FALSE;
 
 Player* CreatePlayer()
 {
@@ -61,6 +64,8 @@ Player* CreatePlayer()
 	player->skill_delay_duration = 0.6f;
 	player->skill_damage = 20;
 	
+	is_firing = FALSE;
+
 	return player;
 }
 
@@ -70,8 +75,13 @@ void UpdatePlayer(Player* player)
 	{
 		DestroyPlayer(player);
 
-		ChangeScene(END);
+		//ChangeScene(END);
 
+		return;
+	}
+
+	if (player->is_destroyed)
+	{
 		return;
 	}
 
@@ -93,6 +103,11 @@ void UpdatePlayer(Player* player)
 
 void RenderPlayer(Player* player)
 {
+	if (player->is_destroyed)
+	{
+		return;
+	}
+
 	if ((IsKeyDown(VK_UP) || IsKeyDown(VK_DOWN)) && !player->is_locked)
 	{
 		RenderShape(&player->position, shape_player, 0);
@@ -141,9 +156,19 @@ void PlayerGetItem(Player* player)
 	if (!(player->gear_state & GEAR_MACHINE_GUN))
 	{
 		player->gear_state |= GEAR_MACHINE_GUN;
+		AddScore(123);
 	}
 	else
 	{
+		if (player->shield == player->shield_max)
+		{
+			AddScore(345);
+		}
+		else
+		{
+			AddScore(234);
+		}
+
 		player->gear_state |= GEAR_SHEILD;
 
 		player->shield += 10;
@@ -215,6 +240,12 @@ static void WeaponUpdate(Player* player)
 	{
 		FireMachineGun(player);
 	}
+	else if (is_firing)
+	{
+		is_firing = FALSE;
+
+		StopGameSound(machine_gun_sound);
+	}
 }
 
 static void FireCanon(Player* player)
@@ -224,6 +255,10 @@ static void FireCanon(Player* player)
 	{
 		if (player->canon_fire_rate < player->canon_timer)
 		{
+			PlayGameSound(canon_sound);
+
+			SetGameSoundVolume(canon_sound, 0.05f);
+
 			player->canon_timer = 0;
 			Bullet bullet;
 			CreateCanonBullet(&bullet, player);
@@ -243,6 +278,19 @@ static void FireMachineGun(Player* player)
 	{
 		if (player->fire_rate < player->machine_gun_timer)
 		{
+			if (!is_firing)
+			{
+				StopGameSound(machine_gun_sound);
+
+				PlayGameSound(machine_gun_sound);
+
+				SetGameSoundLoop(machine_gun_sound);
+
+				SetGameSoundVolume(machine_gun_sound, 0.03f);
+
+				is_firing = TRUE;
+			}
+
 			player->machine_gun_timer = 0.0f;
 			Bullet bullet;
 
@@ -253,6 +301,15 @@ static void FireMachineGun(Player* player)
 			Insert(GetPlayerBulletList(), &bullet, sizeof(Bullet));
 		}
 	}
+	else
+	{
+		if (is_firing)
+		{
+			is_firing = FALSE;
+
+			StopGameSound(machine_gun_sound);
+		}
+	}
 }
 
 static void FireSkill(Player* player)
@@ -261,6 +318,10 @@ static void FireSkill(Player* player)
 	{
 		if (player->skill_gauge == player->skill_gauge_max)
 		{
+			PlayGameSound(skill_charge_sound);
+
+			SetGameSoundVolume(skill_charge_sound, 0.05f);
+
 			player->charge_timer = 0.0f;
 			player->skill_gauge = 0;
 
@@ -293,6 +354,13 @@ static void FireSkill(Player* player)
 			player->skill_delay_timer += DeltaTime();
 			if (player->skill_delay_timer >= player->skill_delay_duration)
 			{
+				StopGameSound(skill_charge_sound);
+				StopGameSound(skill_fire_sound);
+
+				PlayGameSound(skill_fire_sound);
+
+				SetGameSoundVolume(skill_fire_sound, 0.05f);
+
 				player->is_skill_fired = TRUE;
 				player->skill_delay_timer = 0.0f;
 				GiveDamageToAll(player);

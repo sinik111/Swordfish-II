@@ -73,7 +73,7 @@ void UpdateEnemySpawner()
 	Node* fastest_node = enemy_spawn_data_list->head;
 	while (fastest_node != NULL)
 	{
-		if (fastest_node->data.spawn_data.spawn_time <= enemy_spawn_timer)
+		if ((float)fastest_node->data.spawn_data.spawn_time / 10.0f <= enemy_spawn_timer)
 		{
 			Enemy enemy;
 			enemy.spawn_data = fastest_node->data.spawn_data;

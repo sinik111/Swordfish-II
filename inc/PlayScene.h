@@ -27,4 +27,6 @@ Player* GetPlayer();
 
 Boss* GetBoss();
 
+void AddScore(int add_score);
+
 void SetBeam(Beam* new_beam);

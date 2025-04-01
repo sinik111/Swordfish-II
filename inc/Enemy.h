@@ -12,7 +12,9 @@ typedef struct Player Player;
 
 typedef enum EnemyType
 {
-	ENEMY_TYPE_0 = 0,
+	ENEMY_TYPE_0,
+	ENEMY_TYPE_1,
+	ENEMY_TYPE_2,
 } EnemyType;
 
 typedef enum CurrentPoint

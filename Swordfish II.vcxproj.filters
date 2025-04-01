@@ -117,9 +117,6 @@
     <ClCompile Include="src\Boss.c">
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
-    <ClCompile Include="src\Background.c">
-      <Filter>소스 파일\Object</Filter>
-    </ClCompile>
     <ClCompile Include="src\Item.c">
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
@@ -128,6 +125,21 @@
     </ClCompile>
     <ClCompile Include="src\Beam.c">
       <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MenuBackground.c">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MenuStar.c">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PlayBackground.c">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UIBossHP.c">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SoundController.c">
+      <Filter>소스 파일\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -200,9 +212,6 @@
     <ClInclude Include="inc\Boss.h">
       <Filter>헤더 파일\Object</Filter>
     </ClInclude>
-    <ClInclude Include="inc\Background.h">
-      <Filter>헤더 파일\Object</Filter>
-    </ClInclude>
     <ClInclude Include="inc\Item.h">
       <Filter>헤더 파일\Object</Filter>
     </ClInclude>
@@ -211,6 +220,21 @@
     </ClInclude>
     <ClInclude Include="inc\Beam.h">
       <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\MenuBackground.h">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\MenuStar.h">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\PlayBackground.h">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\UIBossHp.h">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\SoundController.h">
+      <Filter>헤더 파일\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -257,6 +281,27 @@
       <Filter>리소스 파일\Shape</Filter>
     </Text>
     <Text Include="data\shape_player_shield.txt">
+      <Filter>리소스 파일\Shape</Filter>
+    </Text>
+    <Text Include="data\effect_beam_energy.txt">
+      <Filter>리소스 파일\Effect</Filter>
+    </Text>
+    <Text Include="data\shape_beam_center.txt">
+      <Filter>리소스 파일\Shape</Filter>
+    </Text>
+    <Text Include="data\shape_beam_side.txt">
+      <Filter>리소스 파일\Shape</Filter>
+    </Text>
+    <Text Include="data\shape_enemy_2.txt">
+      <Filter>리소스 파일\Shape</Filter>
+    </Text>
+    <Text Include="data\shape_enemy_3.txt">
+      <Filter>리소스 파일\Shape</Filter>
+    </Text>
+    <Text Include="data\shape_menu_background.txt">
+      <Filter>리소스 파일\Shape</Filter>
+    </Text>
+    <Text Include="data\shape_play_background.txt">
       <Filter>리소스 파일\Shape</Filter>
     </Text>
   </ItemGroup>

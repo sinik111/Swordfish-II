@@ -13,7 +13,8 @@ typedef struct UnionList List;
 typedef enum BulletType
 {
 	PLAYER_CANON,
-	PLAYER_MACHINE_GUN
+	PLAYER_MACHINE_GUN,
+	ENEMY_BULLET
 } BulletType;
 
 typedef struct Bullet

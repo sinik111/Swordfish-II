@@ -110,11 +110,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Inc\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)inc\;$(SolutionDir)ext\FMOD\inc\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)ext\FMOD\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -125,17 +126,18 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Inc\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)inc\;$(SolutionDir)ext\FMOD\inc\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)ext\FMOD\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Background.c" />
+    <ClCompile Include="src\MenuBackground.c" />
     <ClCompile Include="src\Beam.c" />
     <ClCompile Include="src\Boss.c" />
     <ClCompile Include="src\Bullet.c" />
@@ -154,9 +156,13 @@
     <ClCompile Include="src\Item.c" />
     <ClCompile Include="src\Main.c" />
     <ClCompile Include="src\MenuScene.c" />
+    <ClCompile Include="src\MenuStar.c" />
     <ClCompile Include="src\MyTime.c" />
+    <ClCompile Include="src\PlayBackground.c" />
     <ClCompile Include="src\PlayScene.c" />
     <ClCompile Include="src\Shape.c" />
+    <ClCompile Include="src\SoundController.c" />
+    <ClCompile Include="src\UIBossHP.c" />
     <ClCompile Include="src\UIPlayerHP.c" />
     <ClCompile Include="src\Player.c" />
     <ClCompile Include="src\UIPlayerSkill.c" />
@@ -164,7 +170,7 @@
     <ClCompile Include="src\Vector2.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\Background.h" />
+    <ClInclude Include="inc\MenuBackground.h" />
     <ClInclude Include="inc\Beam.h" />
     <ClInclude Include="inc\Boss.h" />
     <ClInclude Include="inc\Bullet.h" />
@@ -182,17 +188,22 @@
     <ClInclude Include="inc\Input.h" />
     <ClInclude Include="inc\Item.h" />
     <ClInclude Include="inc\MenuScene.h" />
+    <ClInclude Include="inc\MenuStar.h" />
     <ClInclude Include="inc\MyTime.h" />
+    <ClInclude Include="inc\PlayBackground.h" />
     <ClInclude Include="inc\PlayScene.h" />
     <ClInclude Include="inc\Player.h" />
     <ClInclude Include="inc\Shape.h" />
+    <ClInclude Include="inc\SoundController.h" />
     <ClInclude Include="inc\TypeDefines.h" />
+    <ClInclude Include="inc\UIBossHp.h" />
     <ClInclude Include="inc\UIPlayerHP.h" />
     <ClInclude Include="inc\UIPlayerSkill.h" />
     <ClInclude Include="inc\UnionList.h" />
     <ClInclude Include="inc\Vector2.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="data\effect_beam_energy.txt" />
     <Text Include="data\effect_boss_destroy.txt" />
     <Text Include="data\enemy_spawn_data.txt" />
     <Text Include="data\shape_beam_center.txt" />
@@ -203,13 +214,17 @@
     <Text Include="data\effect_canon_hit.txt" />
     <Text Include="data\effect_enemy_destroy.txt" />
     <Text Include="data\shape_enemy_1.txt" />
+    <Text Include="data\shape_enemy_2.txt" />
+    <Text Include="data\shape_enemy_3.txt" />
     <Text Include="data\shape_item_center.txt" />
     <Text Include="data\shape_item_pink.txt" />
     <Text Include="data\shape_item_sky.txt" />
     <Text Include="data\shape_item_yellow.txt" />
     <Text Include="data\effect_player_flame.txt" />
+    <Text Include="data\shape_menu_background.txt" />
     <Text Include="data\shape_player.txt" />
     <Text Include="data\shape_player_shield.txt" />
+    <Text Include="data\shape_play_background.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

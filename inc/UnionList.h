@@ -8,6 +8,7 @@
 #include "Effect.h"
 #include "EnemySpawner.h"
 #include "Item.h"
+#include "MenuStar.h"
 
 typedef enum DataType
 {
@@ -18,6 +19,7 @@ typedef enum DataType
 	DRAW_UNIT,
 	EFFECT,
 	ENEMY_SPAWN_DATA,
+	MENU_SCENE_STAR,
 	ITEM
 } DataType;
 
@@ -38,6 +40,7 @@ typedef struct UnionNode
 		Effect effect;
 		EnemySpawnData spawn_data;
 		Item item;
+		MenuStar star;
 	} data;
 	struct UnionNode* next;
 } Node;

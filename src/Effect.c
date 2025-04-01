@@ -119,28 +119,31 @@ void RenderEffect(Effect* effect)
 	Node* current_shape_node = current_frame_list->data.effect_list->head;
 	while (current_shape_node != NULL)
 	{
-		wchar_t shape = current_shape_node->data.draw_unit.shape;
-		WORD attribute = current_shape_node->data.draw_unit.attribute;
 		Vector2 position = AddVector2(&effect->position, &current_shape_node->data.draw_unit.position);
-
-		switch (attribute)
+		if (!((int)position.x < 0 || (int)position.y < 0 || (int)position.x > ScreenWidth() || (int)position.y > ScreenHeight()))
 		{
-		case 99:
-			attribute = RandomAllColor();
-			break;
+			wchar_t shape = current_shape_node->data.draw_unit.shape;
+			WORD attribute = current_shape_node->data.draw_unit.attribute;
+		
+			switch (attribute)
+			{
+			case 99:
+				attribute = RandomAllColor();
+				break;
 
-		case 98:
-			attribute = RandomRedYellow();
-			break;
+			case 98:
+				attribute = RandomRedYellow();
+				break;
 
-		case 97:
-			attribute = RandomWhiteBlue();
+			case 97:
+				attribute = RandomWhiteBlue();
 
-		default:
-			break;
+			default:
+				break;
+			}
+
+			ScreenDrawChar((int)position.x, (int)position.y, shape, attribute);
 		}
-
-		ScreenDrawChar((int)position.x, (int)position.y, shape, attribute);
 
 		current_shape_node = current_shape_node->next;
 	}

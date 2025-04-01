@@ -14,8 +14,11 @@
 #include "Shape.h"
 #include "PlayScene.h"
 #include "Effect.h"
+#include "SoundController.h"
 
 static float fire_timer = 0.0f;
+static float sound_limit_timer = 0.0f;
+static int sound_limit = 0;
 
 static void EnemyMovement(Enemy* enemy);
 
@@ -34,6 +37,9 @@ void CreateEnemy(Enemy* enemy)
 	enemy->on_waiting = FALSE;
 	enemy->fire_timer = 0.0f;
 	enemy->previous_position = enemy->position;
+
+	sound_limit_timer = 0.0f;
+	sound_limit = 0;
 	//wmemcpy_s(enemy->shape, 2, L"бс", 2);
 }
 
@@ -67,6 +73,15 @@ void UpdateEnemy(Enemy* enemy)
 	if (enemy->hp < 0)
 	{
 		DestroyEnemy(enemy);
+
+		AddScore(357);
+
+		StopGameSound(explosion_sound);
+
+		PlayGameSound(explosion_sound);
+
+		SetGameSoundVolume(explosion_sound, 0.05f);
+
 	}
 
 	enemy->fire_timer += DeltaTime();
@@ -86,7 +101,24 @@ void UpdateEnemy(Enemy* enemy)
 
 void RenderEnemy(Enemy* enemy)
 {
-	RenderShape(&enemy->position, shape_enemy_1, 0);
+	ShapeName shape_name = 0;
+
+	switch (enemy->type)
+	{
+	case ENEMY_TYPE_0:
+		shape_name = shape_enemy_1;
+		break;
+
+	case ENEMY_TYPE_1:
+		shape_name = shape_enemy_2;
+		break;
+
+	case ENEMY_TYPE_2:
+		shape_name = shape_enemy_3;
+		break;
+	}
+
+	RenderShape(&enemy->position, shape_name, 0);
 	//ScreenDrawString((int)enemy->position.x, (int)enemy->position.y, enemy->shape, FG_YELLOW);
 }
 

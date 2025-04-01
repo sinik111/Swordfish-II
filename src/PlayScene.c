@@ -18,6 +18,10 @@
 #include "Item.h"
 #include "UIPlayerSkill.h"
 #include "Beam.h"
+#include "PlayBackground.h"
+#include "Input.h"
+#include "UIBossHp.h"
+#include "SoundController.h"
 
 static Player* player = NULL;
 static List* bullet_list = NULL;
@@ -29,9 +33,17 @@ static Boss* boss = NULL;
 static List* item_list = NULL;
 static UIPlayerSkill* skill_ui = NULL;
 static Beam* beam = NULL;
+static UIBossHP* boss_hp_ui= NULL;
 
 static float item_timer = 0.0f;
 static float item_rate = 3.0f;
+static int score = 0;
+
+static float key_notice_timer = 5.0f;
+
+static float back_to_intro_timer = 30.0f;
+
+static BOOL end_music_on = FALSE;
 
 static void UpdateBulletList();
 static void UpdateEnemyList();
@@ -53,6 +65,8 @@ void InitializePlayScene()
 	InitializeEffectData();
 	InitializeEnemySpawnData();
 
+	InitializePlayBackgroundData();
+
 	player = CreatePlayer();
 	hp_ui = CreateUIPlayerHP();
 	
@@ -64,6 +78,18 @@ void InitializePlayScene()
 	effect_list = CreateList(EFFECT);
 	item_list = CreateList(ITEM);
 
+	item_timer = 0.0f;
+	back_to_intro_timer = 30.0f;
+	key_notice_timer = 5.0f;
+
+	score = 0;
+
+	end_music_on = FALSE;
+
+	PlayGameSound(play_music);
+
+	SetGameSoundVolume(play_music, 0.05f);
+
 	UpdateTime();
 }
 
@@ -74,6 +100,7 @@ void UpdatePlayScene()
 	{
 		// boss 생성코드
 		boss = CreateBoss();
+		boss_hp_ui = CreateUIBossHP();
 		//ChangeScene(END);
 	}
 
@@ -87,6 +114,9 @@ void UpdatePlayScene()
 		CheckBulletsToBossCollision(bullet_list, boss);
 	}
 
+	// background
+	UpdatePlayBackground();
+
 	// object
 	UpdatePlayer(player);
 	UpdateBulletList();
@@ -96,6 +126,7 @@ void UpdatePlayScene()
 	if (boss != NULL)
 	{
 		UpdateBoss(boss);
+		UpdateUIBossHP(boss_hp_ui);
 	}
 
 	UpdateEnemySpawner();
@@ -116,6 +147,9 @@ void UpdatePlayScene()
 
 void RenderPlayScene()
 {
+	// background
+	RenderPlayBackground();
+
 	// object
 	RenderPlayer(player);
 	RenderBulletList();
@@ -124,6 +158,7 @@ void RenderPlayScene()
 	if (boss != NULL)
 	{
 		RenderBoss(boss);
+		RenderUIBossHP(boss_hp_ui);
 	}
 	RenderItemList();
 	if (beam != NULL)
@@ -137,6 +172,88 @@ void RenderPlayScene()
 	// ui
 	RenderUIPlayerHP(hp_ui);
 	RenderUIPlayerSKill(skill_ui);
+
+	int score_calc = score;
+	int score100000 = score_calc / 100000;
+	score_calc %= 100000;
+	int score10000 = score_calc / 10000;
+	score_calc %= 10000;
+	int score1000 = score_calc / 1000;
+	score_calc %= 1000;
+	int score100 = score_calc / 100;
+	score_calc %= 100;
+	int score10 = score_calc / 10;
+	score_calc %= 10;
+	int score1 = score_calc;
+
+	wchar_t score_buffer[20] = { 0 };
+
+	swprintf(score_buffer, 20, L"SCORE %d%d%d%d%d%d", score100000, score10000, score1000, score100, score10, score1);
+
+	ScreenDrawString(50, 0, score_buffer, FG_WHITE);
+
+	if (key_notice_timer > 0)
+	{
+		key_notice_timer -= DeltaTime();
+
+		ScreenDrawString(51, 20, L"press ← ↑ ↓ → to move", FG_WHITE);
+
+		ScreenDrawString(54, 22, L"press A to fire", FG_WHITE);
+	}
+
+	if (IsSpawnerEmpty() && IsEnemyAllDestroyed() && boss != NULL)
+	{
+		if (boss->is_destroyed)
+		{
+			if (!end_music_on)
+			{
+				end_music_on = TRUE;
+
+				StopGameSound(play_music);
+
+				PlayGameSound(end_music);
+
+				SetGameSoundVolume(end_music, 0.05f);
+			}
+
+			ClearList(enemy_bullet_list);
+
+			back_to_intro_timer -= DeltaTime();
+			if (back_to_intro_timer < 0 || IsKeyReleased(VK_SPACE))
+			{
+				ChangeScene(MENU);
+
+				return;
+			}
+
+			ScreenDrawString(57, 14, L"VICTORY", FG_WHITE);
+
+			wchar_t end_buffer[100] = { 0 };
+
+			swprintf(end_buffer, 100, L"press SPACE to back to intro...%d", (int)back_to_intro_timer);
+
+			ScreenDrawString(45, 20, end_buffer, FG_WHITE);
+		}
+	}
+	
+	if (player->is_destroyed)
+	{
+		back_to_intro_timer -= DeltaTime();
+		if (back_to_intro_timer < 0 || IsKeyReleased(VK_SPACE))
+		{
+			ChangeScene(MENU);
+
+			return;
+		}
+
+		ScreenDrawString(58, 14, L"DEFEAT", FG_WHITE);
+		
+		wchar_t end_buffer[100] = { 0 };
+
+		swprintf(end_buffer, 100, L"press SPACE to back to intro...%d", (int)back_to_intro_timer);
+
+		ScreenDrawString(45, 20, end_buffer, FG_WHITE);
+	}
 }
 
 void ReleasePlayScene()
@@ -201,9 +318,24 @@ void ReleasePlayScene()
 		beam = NULL;
 	}
 
+	if (boss_hp_ui != NULL)
+	{
+		free(boss_hp_ui);
+		boss_hp_ui = NULL;
+	}
+
 	ReleaseEffectData();
 	ReleaseShapeData();
 	ReleaseEnemySpawnData();
+	ReleasePlayBackgroundData();
+
+	StopGameSound(play_music);
+	StopGameSound(end_music);
+	StopGameSound(canon_sound);
+	//StopGameSound(machine_gun_sound);
+	StopGameSound(skill_charge_sound);
+	StopGameSound(skill_fire_sound);
+	StopGameSound(explosion_sound);
 }
 
 List* GetEffectList()
@@ -234,6 +366,11 @@ Player* GetPlayer()
 Boss* GetBoss()
 {
 	return boss;
+}
+
+void AddScore(int add_score)
+{
+	score += add_score;
 }
 
 void SetBeam(Beam* new_beam)

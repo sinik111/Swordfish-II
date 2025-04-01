@@ -48,6 +48,7 @@ typedef struct Boss
 	float pattern_timer;
 	float mid_pattern_timer;
 	int boss_pattern_state;
+	int max_hp;
 	int hp;
 	int empty_position;
 	BOOL is_destroyed;

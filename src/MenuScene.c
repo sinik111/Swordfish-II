@@ -6,36 +6,87 @@
 #include "ConsoleRenderer.h"
 #include "UnionList.h"
 #include "MyTime.h"
+#include "Input.h"
+#include "Game.h"
+#include "MenuBackground.h"
+#include "MenuStar.h"
+#include "SoundController.h"
 
-static wchar_t menu_data[5][25];
+static List* star_list = NULL;
+static float star_timer = 0.0f;
+static float star_rate = 0.05f;
 
 void InitializeMenuScene()
 {
-	for (int i = 0; i < 4; ++i)
-	{
-		wmemcpy_s(menu_data[i], 25, L"menu menu menu menu menu", 25);
-	}
+	InitializeMenuBackgroundData();
 
-	wmemcpy_s(menu_data[4], 25, L"press space to countinue", 25);
+	star_list = CreateList(MENU_SCENE_STAR);
+
+	PlayGameSound(intro_music);
+
+	SetGameSoundLoop(intro_music);
+
+	SetGameSoundVolume(intro_music, 0.05f);
 }
 
 void UpdateMenuScene()
 {
+	star_timer += DeltaTime();
 
+	if (star_timer > star_rate)
+	{
+		star_timer -= star_rate;
+
+		MenuStar star;
+		CreateMenuStar(&star);
+
+		Insert(star_list, &star, sizeof(MenuStar));
+	}
+
+	Node* previous_node = NULL;
+	Node* current_node = star_list->head;
+	while (current_node != NULL)
+	{
+		UpdateMenuStar(&current_node->data.star);
+		if (IsStarDestroyed(&current_node->data.star))
+		{
+			current_node = RemoveNode(star_list, previous_node, current_node);
+		}
+		else
+		{
+			previous_node = current_node;
+			current_node = current_node->next;
+		}
+	}
+
+	if (IsKeyReleased(VK_SPACE))
+	{
+		ChangeScene(PLAY);
+	}
 }
 
 void RenderMenuScene()
 {
+	RenderMenuBackground();
 
-	for (int i = 0; i < 4; ++i)
+	Node* current_node = star_list->head;
+	while (current_node != NULL)
 	{
-		ScreenDrawString(ScreenWidth() / 2 - 12, ScreenHeight() / 2 - 3 + i, menu_data[i], FG_BLUE);
+		RenderMenuStar(&current_node->data.star);
+
+		current_node = current_node->next;
 	}
 
-	ScreenDrawString(ScreenWidth() / 2 - 12, ScreenHeight() / 2 + 9, menu_data[4], FG_YELLOW);
+	ScreenDrawString(90, 10, L"Swordfish II", FG_WHITE);
+
+	ScreenDrawString(86, 20, L"press SPACE to start", FG_WHITE);
 }
 
 void ReleaseMenuScene()
 {
+	StopGameSound(intro_music);
 
+	ReleaseMenuBackgroundData();
+
+	DeleteList(star_list);
 }

@@ -9,6 +9,8 @@ typedef enum ShapeName
 {
 	shape_player,
 	shape_enemy_1,
+	shape_enemy_2,
+	shape_enemy_3,
 	shape_boss_ship,
 	shape_boss_gun,
 	shape_item_center,

@@ -56,3 +56,5 @@ dkms.conf
 /.vs
 /Swordfish II
 /x64
+!fmod.dll
+!fmod_vc.lib

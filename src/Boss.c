@@ -12,6 +12,7 @@
 #include "PlayScene.h"
 #include "UnionList.h"
 #include "Player.h"
+#include "SoundController.h"
 
 static void BossEnter(Boss* boss);
 static void BossPattern(Boss* boss);
@@ -31,10 +32,11 @@ Boss* CreateBoss()
 	boss->speed = 10.0f;
 	boss->is_destroyed = FALSE;
 	boss->boss_pattern_state = STATE_NONE;
-	boss->hp = 20;
+	boss->max_hp = 1000;
+	boss->hp = 1000;
 	boss->boss_timer = 0.0f;
 	boss->is_started = FALSE;
-	boss->mid_pattern_timer = 2.0f;
+	boss->mid_pattern_timer = 3.0f;
 	vec2 destination = { (float)ScreenWidth() - 10, (float)ScreenHeight() / 2 };
 	boss->destination = destination;
 	vec2 fire_position = { -16.0f, -11.0f };
@@ -82,11 +84,21 @@ void UpdateBoss(Boss* boss)
 {
 	if (boss->hp <= 0)
 	{
-		boss->is_destroyed = TRUE;
+		if (!boss->is_destroyed)
+		{
+			boss->is_destroyed = TRUE;
+
+			AddScore(3579);
+		}
+		
 
 		boss->boss_timer += DeltaTime();
 		if (boss->boss_timer > 0.5f)
 		{
+			/*PlayGameSound(explosion_sound);
+
+			SetGameSoundVolume(explosion_sound, 0.05f);*/
+
 			Effect effect;
 
 			// 104 ~ 119 , 10 ~ 20
@@ -160,7 +172,18 @@ void UpdateBoss(Boss* boss)
 					break;
 				}
 
-				boss->mid_pattern_timer = 3.0f;
+				if (boss->hp < 500)
+				{
+					boss->mid_pattern_timer = 1.0f;
+				}
+				else if (boss->hp < 700)
+				{
+					boss->mid_pattern_timer = 1.5f;
+				}
+				else
+				{
+					boss->mid_pattern_timer = 3.0f;
+				}
 			}
 		}
 	}

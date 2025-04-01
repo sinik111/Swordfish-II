@@ -77,6 +77,7 @@ void CreateEnemyBullet(Bullet* bullet, const Vector2* position)
 	bullet->timer = 10.0f;
 	bullet->damage = 1;
 	bullet->is_destroyed = FALSE;
+	bullet->type = ENEMY_BULLET;
 	wmemcpy_s(bullet->shape, 2, L"●", 2);
 }
 
@@ -95,7 +96,7 @@ void UpdateBullet(Bullet* bullet)
 		break;
 	}
 
-	if (bullet->timer <= 0.0f)
+	if (bullet->position.x < 0 || bullet->position.y < 0 || bullet->position.y > ScreenHeight() || bullet->timer <= 0.0f)
 	{
 		DestroyBullet(bullet);
 	}
@@ -107,9 +108,13 @@ void RenderBullet(Bullet* bullet)
 	{
 		ScreenDrawString((int)bullet->position.x, (int)bullet->position.y, bullet->shape, FG_BLUE);
 	}
-	else
+	else if (bullet->type == PLAYER_MACHINE_GUN)
 	{
 		ScreenDrawString((int)bullet->position.x, (int)bullet->position.y, bullet->shape, FG_WHITE);
+	}
+	else
+	{
+		ScreenDrawString((int)bullet->position.x, (int)bullet->position.y, bullet->shape, FG_RED);
 	}
 }
 
@@ -144,7 +149,7 @@ void PlayBulletHitEffect(Bullet* bullet)
 static void BulletBackFlame(Bullet* bullet)
 {
 	bullet->back_flame_timer += DeltaTime();
-	if (bullet->back_flame_timer > 0.05f)
+	if (bullet->back_flame_timer > 0.02f)
 	{
 		Effect effect;
 
@@ -152,6 +157,6 @@ static void BulletBackFlame(Bullet* bullet)
 
 		Insert(GetEffectList(), &effect, sizeof(Effect));
 
-		bullet->back_flame_timer -= 0.05f;
+		bullet->back_flame_timer -= 0.02f;
 	}
 }

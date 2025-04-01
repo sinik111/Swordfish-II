@@ -20,6 +20,8 @@ void InitializeShapeData()
 {
 	CreateShapeData(L"shape_player.txt", shape_player);
 	CreateShapeData(L"shape_enemy_1.txt", shape_enemy_1);
+	CreateShapeData(L"shape_enemy_2.txt", shape_enemy_2);
+	CreateShapeData(L"shape_enemy_3.txt", shape_enemy_3);
 	CreateShapeData(L"shape_boss_ship.txt", shape_boss_ship);
 	CreateShapeData(L"shape_boss_gun.txt", shape_boss_gun);
 	CreateShapeData(L"shape_item_center.txt", shape_item_center);

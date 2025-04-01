@@ -9,6 +9,7 @@
 #include "EndScene.h"
 #include "Global.h"
 #include "MyTime.h"
+#include "SoundController.h"
 
 static Scene current_scene = NONE;
 static Scene next_scene = NONE;
@@ -21,6 +22,8 @@ void InitializeGame()
 {
     setlocale(LC_ALL, "");
 
+    InitializeSoundController();
+    
     ScreenInit();
 
     next_scene = MENU;
@@ -72,14 +75,6 @@ void UpdateGame()
 
     UpdateInput();
 
-    if (IsKeyReleased(VK_SPACE))
-    {
-        if (next_scene < END)
-        {
-            ++next_scene;
-        }
-    }
-
     if (IsKeyReleased(VK_ESCAPE))
     {
         g_quit = 1;
@@ -102,6 +97,8 @@ void ReleaseGame()
     ReleaseScene();
 
     ScreenRelease();
+
+    ReleaseSoundController();
 }
 
 void ChangeScene(Scene scene)

@@ -3,6 +3,8 @@
 #include "Global.h"
 #include "DebugUtility.h"
 
+#pragma comment(lib, "fmod_vc.lib")
+
 int main()
 {
 	ENABLE_LEAK_CHECK();
