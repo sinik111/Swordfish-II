@@ -26,3 +26,5 @@ void StopGameSound(SoundName name);
 void SetGameSoundVolume(SoundName name, float volume);
 
 void SetGameSoundLoop(SoundName name);
+
+void UpdateSoundController();

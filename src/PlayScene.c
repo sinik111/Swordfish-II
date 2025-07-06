@@ -332,7 +332,7 @@ void ReleasePlayScene()
 	StopGameSound(play_music);
 	StopGameSound(end_music);
 	StopGameSound(canon_sound);
-	//StopGameSound(machine_gun_sound);
+	StopGameSound(machine_gun_sound);
 	StopGameSound(skill_charge_sound);
 	StopGameSound(skill_fire_sound);
 	StopGameSound(explosion_sound);

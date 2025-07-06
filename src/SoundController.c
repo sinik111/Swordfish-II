@@ -105,3 +105,8 @@ void SetGameSoundLoop(SoundName name)
 {
 	FMOD_Sound_SetMode(sounds[name], FMOD_LOOP_NORMAL);
 }
+
+void UpdateSoundController()
+{
+	FMOD_System_Update(fmod_system);
+}

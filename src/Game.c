@@ -75,6 +75,8 @@ void UpdateGame()
 
     UpdateInput();
 
+    UpdateSoundController();
+
     if (IsKeyReleased(VK_ESCAPE))
     {
         g_quit = 1;
