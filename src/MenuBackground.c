@@ -1,5 +1,7 @@
 ﻿#include "MenuBackground.h"
 
+#include "DebugUtility.h"
+
 #include <stdlib.h>
 #include <wchar.h>
 
@@ -8,7 +10,6 @@
 #include "MyTime.h"
 #include "TypeDefines.h"
 #include "ConsoleRenderer.h"
-#include "DebugUtility.h"
 
 static int data_n = 0;
 static int data_m = 0;

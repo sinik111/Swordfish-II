@@ -1,6 +1,6 @@
 #pragma once
 
-#include <wchar.h>
+//#include <wchar.h>
 
 void InitializeMenuBackgroundData();
 
